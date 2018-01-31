@@ -2,7 +2,7 @@
   "name": "tic-tac-toe",
   "version": "1.0.0",
   "description": "",
-  "main": "app/index.js",
+  "main": "index.js",
   "scripts": {
     "build": "webpack --config webpack.config.js",
     "dev": "webpack-dev-server --hot --inline"
