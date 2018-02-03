@@ -11,20 +11,18 @@ ol, ul ,li{
 
 
 .widget-block{
-  display: flex;
+  position: relative;
   width:300px;
   height: 300px;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-start;
-  flex-wrap: wrap;
   background-color: antiquewhite;
   padding:1px;
   border-radius: 2px;
   border:1px solid #e23f56;
   li{
-    position: relative;
-    display: inline-flex;
+    position: absolute;
+    top:0;
+    left:0;
+    display:flex;
     justify-content: center;
     align-items: center;
     width:98px;
@@ -42,5 +40,45 @@ ol, ul ,li{
       border: 1px solid #999999;
       border-radius: 2px;
     }
+    &.empty-block{
+      height:0;
+      width:0;
+      background-color: transparent;
+      font-size: 0;
+      &:before{
+        display: none;
+      }
+    }
+    &.pos-x0{
+      left:0;
+    }
+    &.pos-x1{
+      left:101px;
+    }
+    &.pos-x2{
+      left:202px;
+    }
+    &.pos-x3{
+      left:303px;
+    }
+    &.pos-x4{
+      left:404px;
+    }
+    &.pos-y0{
+      top:0;
+    }
+    &.pos-y1{
+      top:101px;
+    }
+    &.pos-y2{
+      top:202px;
+    }
+    &.pos-y3{
+      top:303px;
+    }
+    &.pos-y4{
+      left:404px;
+    }
+
   }
 }

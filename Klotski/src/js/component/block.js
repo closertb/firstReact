@@ -9,8 +9,13 @@ import React from 'react';
 
 
 function Square(props) {
+    var value = props.sequence;
+    var style ="square"+' pos-y'+Math.floor(value/3) + ' pos-x'+value%3;
+    if(props.value === 0 ){
+        style = style + ' empty-block';
+    }
     return (
-        <li className="square" onClick={props.onClick}>
+        <li className={style} onClick={props.onClick}>
         <span>{props.value}</span>
         </li>
 );
@@ -21,6 +26,7 @@ export default class Block extends React.Component{
         return (
             <Square
                 value={this.props.squares[i]}
+                sequence = {i}
                 onClick={() => this.props.onClick(i)}
             />
         );

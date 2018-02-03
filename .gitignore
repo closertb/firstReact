@@ -1,2 +1,4 @@
 node_modules/
 .idea/
+.vscode/
+.idea/vcs.xml
