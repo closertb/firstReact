@@ -6,43 +6,46 @@
  * Description:
  */
 import React from 'react';
+import Square from './square';
+import {pointer} from "./util";
+function Squa(props) {
 
-
-function Square(props) {
-    var value = props.sequence;
-    var style ="square"+' pos-y'+Math.floor(value/3) + ' pos-x'+value%3;
-    if(props.value === 0 ){
-        style = style + ' empty-block';
-    }
-    return (
-        <li className={style} onClick={props.onClick}>
-        <span>{props.value}</span>
-        </li>
-);
 }
-
 export default class Block extends React.Component{
+    constructor(){
+        super();
+        this.handleEvent = this.handleEvent.bind(this);
+    }
+    handleEvent(dir,index){
+        if(dir==='none'){
+            return ;
+        }
+        this.props.handle(dir,index);
+    }
     renderSquare(i) {
+        let val = this.props.squares[i];
         return (
             <Square
-                value={this.props.squares[i]}
+                value={val}
                 sequence = {i}
-                onClick={() => this.props.onClick(i)}
+                key = {i}
+                level = {this.props.level}
             />
         );
     }
     render() {
+        const _this = this;
+        const listItems = this.props.squares.map(function(t,index){
+            return _this.renderSquare(index);
+        });
+        const className = "widget-block "+'level-'+this.props.level;
         return (
-            <ul className="widget-block">
-                {this.renderSquare(0)}
-                {this.renderSquare(1)}
-                {this.renderSquare(2)}
-                {this.renderSquare(3)}
-                {this.renderSquare(4)}
-                {this.renderSquare(5)}
-                {this.renderSquare(6)}
-                {this.renderSquare(7)}
-                {this.renderSquare(8)}
+            <ul className={className}
+                onSelect = {()=>{return false;}}
+                onMouseUp={(e)=>{pointer.listen(e,this.handleEvent)}}
+                onTouchEnd={(e)=>{pointer.listen(e,this.handleEvent)}}
+            >
+                {listItems}
             </ul>
         );
     }

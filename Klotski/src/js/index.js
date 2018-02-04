@@ -8,40 +8,29 @@
 import '../css/index.scss';
 
 import React from 'react';
-import { render } from 'react-dom'
+import {render} from 'react-dom'
 
-import Block from './component/block'
+import Game from './component/game';
+
 
 /*
 export default class Game extends React.Component {
 
 }*/
-
-const squares= Array(9).fill(null).map(function (t,index) {
-    console.log(t,index);
-    return index;
-});
-const handleClick =(e)=>{
-        console.log(e);
-};
-const util ={
-    disorganize:(length)=>{
-        const arr= [];
-        let temp ;
-        for(var i= 0;i<length;i++){
-            arr.push(i);
-        }
-        for(i= 0;i<length;i++){
-            let random = Math.round(Math.random()*(length-1));
-            temp = arr[random];
-            arr[random] = arr[i];
-            arr[i] = temp;
-        }
-        return arr;
+const handleClick = (index, value) => {
+    console.log('posOld:',index, value);
+    const newIndex = getTargetState(level,index,'up');
+    if(newIndex === index){
+        console.log('not change');
+        return ;
     }
-}
+    let temp = squares[index];
+    squares[index] = squares[newIndex];
+    squares[newIndex] = temp;
+    console.log('posNew:',newIndex);
+};
 
 render(
-    <Block onClick={handleClick} squares = {util.disorganize(9)}/>,
+    <Game />,
     document.getElementById('app')
 );

@@ -9,15 +9,34 @@ ol, ul ,li{
   list-style: none;
 }
 
-
+.show-status{
+  font:bold 28px/38px "Microsoft Yahei";
+  color:#239967;
+  &.success-status{
+    color:#e23f56;
+  }
+}
 .widget-block{
   position: relative;
-  width:300px;
-  height: 300px;
-  background-color: antiquewhite;
+  min-width:300px;
+  min-height: 300px;
+  margin:0 auto;
   padding:1px;
   border-radius: 2px;
   border:1px solid #e23f56;
+  background-color: antiquewhite;
+  &.level-3{
+    width:300px;
+    height: 300px;
+  }
+  &.level-4{
+    width:400px;
+    height: 400px;
+  }
+  &.level-5{
+    width:500px;
+    height: 500px;
+  }
   li{
     position: absolute;
     top:0;
@@ -30,6 +49,7 @@ ol, ul ,li{
     border-radius: 2px;
     background-color: aquamarine;
     font:bold 24px "Microsoft Yahei";
+    transition: top 0.5s ease-out;
     &:before{
       content: '';
       position: absolute;
