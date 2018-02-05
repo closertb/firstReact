@@ -1,42 +1,156 @@
+@import "theme";
 body {
-  font:normal 14px "Microsoft Yahei", Futura, sans-serif;
-  margin: 20px;
+  font:normal 16px "Microsoft Yahei", Futura, sans-serif;
+  height:100%;
+  background-color: $titleBgColor;
 }
+$bottonBg: $auxiliaryColor07;
 div,p,ul,li{
   margin:0;padding:0;
 }
 ol, ul ,li{
   list-style: none;
 }
+.game-box{
+  position: relative;
+  height:100%;
+  min-height: 500px;
+  box-sizing: border-box;
+  margin:0 auto;
+  padding:5px 10px;
 
-.show-status{
-  font:bold 28px/38px "Microsoft Yahei";
-  color:#239967;
-  &.success-status{
-    color:#e23f56;
+  text-align: center;
+  .nav-bar{
+    position:relative;
+    .go-back{
+      position: absolute;
+      width:30px;
+      height:30px;
+      border-radius: 50%;
+      left:5px;
+      top:12px;
+      background-color:yellowgreen;
+      &:before{
+        content: '';
+        top:9px;
+        left:4px;
+        position: absolute;
+        width:0;
+        height:0;
+        border-color: transparent white  transparent white;
+        border-width: 6px 11px 6px  0;
+        border-style: solid;
+      }
+      &:after{
+        content: '';
+        top:12px;
+        left:11px;
+        position: absolute;
+        width:13px;
+        height:6px;
+        background-color: white;
+      }
+    }
+  }
+  .show-status{
+    display: inline-block;
+    font:bold 1rem/1.8rem "Microsoft Yahei";
+    padding:0 30px;
+    margin:10px 0 30px;
+    color:$lightBluefontColor;
+    border:2px solid $segmentLine;
+    border-radius: 25px;
+    &.success-status{
+      color:$auxiliaryColor06;
+    }
+  }
+  .simple-box{
+    position: relative;
+    .filter-box{
+      position: absolute;
+      z-index: 99;
+      top:0;
+      left:2px;
+      right:2px;
+      bottom:0;
+      border-radius: 2px;
+      background-color: rgba(255,255,255,.6);
+    }
+  }
+  .widget-block{
+    position: relative;
+    min-width:300px;
+    min-height: 300px;
+    margin:0 auto;
+    padding:1px;
+    border-radius: 2px;
+    color:$primaryFontColor;
+    background-color: $moduleBgColor;
+  }
+  .stop-button{
+    position: relative;
+    display: inline-block;
+    height:80px;
+    width: 80px;
+    margin-top:50px;
+    border-radius: 40px;
+    background-color: $auxiliaryColor06;
+    &:before{
+      content:'';
+      position: absolute;
+      height:40px;
+      width:12px;
+      background-color: $primaryFontColor;
+      top:20px;
+      left:24px;
+    }
+    &:after{
+      content:'';
+      position: absolute;
+      height:40px;
+      width:12px;
+      background-color:$primaryFontColor;
+      top:20px;
+      right:24px;
+    }
+  }
+  .start-button{
+    height:80px;
+    width: 80px;
+    border-radius: 40px;
+    &:before{
+      content: '';
+      top:20px;
+      left:28px;
+      position: absolute;
+      width:0;
+      height:0;
+      border-color: transparent greenyellow transparent greenyellow ;
+      border-width: 20px 0 20px  36px;
+      border-style: solid;
+    }
+    &.be-center{
+      background-color: white;
+      position: relative;
+      margin:50px auto 0;
+    }
+  }
+  .shadow-box{
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    z-index: 99;
+    top:0;
+    left:0;
+    right:0;
+    bottom:0;
+    background-color: rgba(0,0,0,.8);
   }
 }
+
 .widget-block{
-  position: relative;
-  min-width:300px;
-  min-height: 300px;
-  margin:0 auto;
-  padding:1px;
-  border-radius: 2px;
-  border:1px solid #e23f56;
-  background-color: antiquewhite;
-  &.level-3{
-    width:300px;
-    height: 300px;
-  }
-  &.level-4{
-    width:400px;
-    height: 400px;
-  }
-  &.level-5{
-    width:500px;
-    height: 500px;
-  }
   li{
     position: absolute;
     top:0;
@@ -47,9 +161,11 @@ ol, ul ,li{
     width:98px;
     height:98px;
     border-radius: 2px;
-    background-color: aquamarine;
-    font:bold 24px "Microsoft Yahei";
-    transition: top 0.5s ease-out;
+    background-color: $auxiliaryColor07;
+    margin:0 2px 2px 0 ;
+    font:bold 1.5rem "Microsoft Yahei";
+    transition: top .5s,left .5s ease-out;
+    touch-action: none;
     &:before{
       content: '';
       position: absolute;
@@ -57,7 +173,7 @@ ol, ul ,li{
       bottom: 3px;
       left:3px;
       right:3px;
-      border: 1px solid #999999;
+      border: 1px solid  $auxiliaryColor03;
       border-radius: 2px;
     }
     &.empty-block{
@@ -69,36 +185,60 @@ ol, ul ,li{
         display: none;
       }
     }
-    &.pos-x0{
-      left:0;
+  }
+}
+.shadow-box{
+  .shadow-info{
+    width:100%;
+    font:bold 1.5rem/1.8rem "Microsoft Yahei";
+    color:white;
+  }
+  .shadow-event{
+    width:100%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin:20px 0 0;
+    span{
+      display: inline-block;
+      position: relative;
+      height:60px;
+      width: 60px;
+      border-radius: 30px;
+      background-color: $bottonBg;
     }
-    &.pos-x1{
-      left:101px;
+    .reset-button{
+      &:before{
+        content: '';
+        top:19px;
+        left:19px;
+        position: absolute;
+        width:24px;
+        height:24px;
+        background-color: $fiv-level;
+      }
     }
-    &.pos-x2{
-      left:202px;
+    .home-button{
+      &:before{
+        content: '';
+        top:12px;
+        left:10px;
+        position: absolute;
+        width:0;
+        height:0;
+        border-color: white transparent white  transparent;
+        border-width: 0 20px 16px  20px;
+        border-style: solid;
+      }
+      &:after{
+        content: '';
+        top:28px;
+        left:20px;
+        position: absolute;
+        width:21px;
+        height:15px;
+        background-color: white;
+      }
     }
-    &.pos-x3{
-      left:303px;
-    }
-    &.pos-x4{
-      left:404px;
-    }
-    &.pos-y0{
-      top:0;
-    }
-    &.pos-y1{
-      top:101px;
-    }
-    &.pos-y2{
-      top:202px;
-    }
-    &.pos-y3{
-      top:303px;
-    }
-    &.pos-y4{
-      left:404px;
-    }
-
   }
 }

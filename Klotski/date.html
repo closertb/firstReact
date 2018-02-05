@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<button type="button" onclick="timer('ptime')">
+    开始计时
+</button>
+<p id="ptime"></p>
+<script type="text/javascript">
+    var tFlag = 0;
+    var tPass = 0;
+    function timer(id) {
+        if (tFlag != 0) {
+            var tNew = new Date().getTime();
+            tPass = tPass + (tNew - tFlag);
+            tFlag = tNew;
+
+        } else {
+            tFlag = new Date().getTime();
+        }
+        setTimeout("timer('" + id + "')", 100);
+        var ml = Math.floor(tPass/10 % 100);
+        var sc = Math.floor((tPass / 1000) % 60);
+        var mi = Math.floor((tPass / 1000 / 60) % 60);
+        var hr = Math.floor((tPass / 1000 / 60 / 60) % 24);
+        var dy = Math.floor(tPass / 1000 / 60 / 60 / 24);
+        var info = dy + "天" + hr + "时" + mi + "分" + sc + "秒" + ml + "毫秒";
+        document.getElementById(id).innerHTML = info;
+    }
+</script>
+</body>
+</html>

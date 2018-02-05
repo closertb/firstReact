@@ -7,7 +7,7 @@
  */
 
 import React from 'react';
-import {pointer} from  './util';
+import {pointer} from '../util/util';
 
 export default class Square extends React.Component {
     render() {
@@ -21,7 +21,7 @@ export default class Square extends React.Component {
                 className={style}
                 onSelect = {(e)=>{e.preventDefault();}}
                 onMouseDown={(e)=>{e.preventDefault(); pointer.listen(e,null,value)}}
-                onTouchStart={(e)=>{e.preventDefault(); pointer.listen(e,null,value)}}
+                onTouchStart={(e)=>{ pointer.listen(e,null,value)}}
             >
                 <span>{this.props.value}</span>
             </li>

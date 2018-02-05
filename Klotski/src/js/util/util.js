@@ -119,3 +119,35 @@ export const pointer = {
         return dir;
     }
 }
+export const timer ={
+
+    interId:0,
+    start:function (callback) {
+        const _this = this;
+        let startTime = new Date().getTime(),tPass=0;
+        const formatter=(t)=>{
+            const res =t>9 ? t : '0'+t
+            return res;
+        }
+        this.interId = setInterval(function () {
+            let tNew = new Date().getTime(),ms,sec,min,timeStr;
+            tPass = tNew - startTime;
+            ms = Math.floor(tPass % 1000%10);
+            sec = Math.floor((tPass / 1000) % 60);
+            min = Math.floor((tPass / 1000 / 60) % 60);
+            timeStr = formatter(min)+':'+formatter(sec)+':'+formatter(ms);
+            callback(timeStr);
+        },100)
+    },
+    stop:function () {
+        clearInterval(this.interId);
+    }
+}
+export const arrayGenerate =(length)=>{
+    const items =[];
+    for(let i=1;i<length;i++){
+        items.push(i);
+    }
+    items.push(0);
+    return items ;
+}

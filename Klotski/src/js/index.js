@@ -1,7 +1,7 @@
 /**
  * Title:
  * @author Mr Denzel
- * @create Date 2018-02-01 21:47
+ * @create Date 2018-02-03 21:47
  * @version 1.0
  * Description:
  */
@@ -10,7 +10,8 @@ import '../css/index.scss';
 import React from 'react';
 import {render} from 'react-dom'
 
-import Game from './component/game';
+import Game from './page/game';
+import Simple from "./page/simple";
 
 
 /*
@@ -29,8 +30,7 @@ const handleClick = (index, value) => {
     squares[newIndex] = temp;
     console.log('posNew:',newIndex);
 };
-
 render(
-    <Game />,
+    <Simple />,
     document.getElementById('app')
 );
