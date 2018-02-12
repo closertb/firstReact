@@ -5,7 +5,7 @@ body {
   background-color: $titleBgColor;
 }
 $bottonBg: $auxiliaryColor07;
-div,p,ul,li{
+div,p,ul,li,h2,h3{
   margin:0;padding:0;
 }
 ol, ul ,li{
@@ -54,6 +54,7 @@ ol, ul ,li{
   }
   .show-status{
     display: inline-block;
+    position: relative;
     font:bold 1rem/1.8rem "Microsoft Yahei";
     padding:0 30px;
     margin:10px 0 30px;
@@ -63,18 +64,18 @@ ol, ul ,li{
     &.success-status{
       color:$auxiliaryColor06;
     }
-  }
-  .simple-box{
-    position: relative;
-    .filter-box{
+    .total-step{
+      display: inline-block;
       position: absolute;
-      z-index: 99;
+      box-sizing: border-box;
+      WIDTH:48px;
+      right:-70px;
       top:0;
-      left:2px;
-      right:2px;
-      bottom:0;
-      border-radius: 2px;
-      background-color: rgba(255,255,255,.6);
+      padding:0 10px;
+      border:2px solid $auxiliaryColor03;
+      background-color: $auxiliaryColor07;
+      border-radius: 5px;
+      color:white;
     }
   }
   .widget-block{
@@ -120,23 +121,27 @@ ol, ul ,li{
     border-radius: 40px;
     &:before{
       content: '';
-      top:20px;
-      left:28px;
+      top:14px;
+      left:21px;
       position: absolute;
       width:0;
       height:0;
       border-color: transparent greenyellow transparent greenyellow ;
-      border-width: 20px 0 20px  36px;
+      border-width: 16px 0 16px  30px;
       border-style: solid;
     }
     &.be-center{
       background-color: white;
       position: relative;
       margin:50px auto 0;
+      &:before{
+        top:25px;
+        left:30px;
+      }
     }
   }
   .shadow-box{
-    position: absolute;
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -151,6 +156,11 @@ ol, ul ,li{
 }
 
 .widget-block{
+  &.add-filter{
+    li{
+      filter:blur(1px);
+    }
+  }
   li{
     position: absolute;
     top:0;
@@ -188,17 +198,48 @@ ol, ul ,li{
   }
 }
 .shadow-box{
+  &.show-success{
+    background-color: white;
+    .vertical-box{
+      border: 2px solid $darkBluefontColor;
+      border-radius: 15px;
+      background-color: $primaryFontColor;
+    }
+    .shadow-info{
+      color:$auxiliaryColor07;
+    }
+  }
+  .middle-left{
+    text-align: left;
+    line-height: 42px;
+    display: inline-block;
+  }
+  .vertical-box{
+    margin:25px 35px;
+    padding:15px 0;
+    box-sizing: border-box;
+  }
   .shadow-info{
     width:100%;
-    font:bold 1.5rem/1.8rem "Microsoft Yahei";
+    font:bold 1.3rem/1.8rem "Microsoft Yahei";
+    padding:0 0 10px;
     color:white;
+  }
+  .show-level{
+    font:bold 1.6rem/2.5rem "Microsoft Yahei";
+    padding:20px 0 0;
+    color:$auxiliaryColor07;
+  }
+  .show-time{
+    font:bold 1.3rem/1.8rem "Microsoft Yahei";
+    color:$auxiliaryColor07;
   }
   .shadow-event{
     width:100%;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    margin:20px 0 0;
+    margin:20px 0 10px;
     span{
       display: inline-block;
       position: relative;
@@ -206,6 +247,27 @@ ol, ul ,li{
       width: 60px;
       border-radius: 30px;
       background-color: $bottonBg;
+    }
+    .more-button{
+      color:white;
+      background-image: url('../images/refresh.svg');
+      background-repeat:no-repeat ;
+      background-position: center center;
+      background-size: 45px 45px;
+    }
+    .share-button{
+      color:white;
+      background-image: url('../images/share.svg');
+      background-repeat:no-repeat ;
+      background-position: center center;
+      background-size: 35px 35px;
+    }
+    .home-button{
+      color:white;
+      background-image: url('../images/home.svg');
+      background-repeat:no-repeat ;
+      background-position: center center;
+      background-size: 40px 40px;
     }
     .reset-button{
       &:before{
@@ -218,7 +280,7 @@ ol, ul ,li{
         background-color: $fiv-level;
       }
     }
-    .home-button{
+    .homed-button{
       &:before{
         content: '';
         top:12px;
@@ -241,4 +303,132 @@ ol, ul ,li{
       }
     }
   }
+}
+.home-page{
+  margin-top:50px;
+  text-align: center;
+  color:$primaryFontColor;
+  h2{
+    line-height: 1.5em;
+  }
+  h3{
+       line-height: 2em;
+  }
+  .level-items{
+    margin-top:30px;
+    line-height: 3rem;
+    color:$e05;
+    li{
+      font-weight: bold;
+      margin:20px auto 0;
+      width:150px;
+      font-size: 1.5rem;
+      background-color: white;
+      border-radius: 1.5rem;
+      letter-spacing: 0.5rem;
+      a{
+        color:$e05;
+        text-decoration: none;
+        &:hover{
+          color:$e09;
+          cursor: pointer;
+        }
+      }
+      &:last-child{
+        letter-spacing: 0.5rem;
+        span{
+          letter-spacing: .1rem;
+        }
+      }
+    }
+  }
+}
+
+.picker-module{
+  position: fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  z-index:5;
+  &.none{
+    display: none;
+  }
+  .picker-content{
+    position: relative;
+    z-index:7;
+    background-color: white;
+    overflow: hidden;
+  }
+  li{
+    height:35px;
+    line-height: 35px;
+    text-align: center;
+  }
+  .opacity-layer{
+    position: relative;
+    z-index: 8;
+    li{
+      background-color: rgba(225,225,225,0.6);
+      &.curry{
+        border: 1px solid rgba(225,225,225,0.7);
+        background-color:rgba(225,225,225,0.2);
+      }
+    }
+
+  }
+  .select-list{
+    position: absolute;
+    top:0;
+    width:100%;
+    z-index: 6;
+    font-size: 1rem;
+    transition: font 0.3s,transform 0.5s ease-out;
+    color:$darkBluefontColor;
+    .curry{
+      font-size: 1.2rem;
+    }
+  }
+
+}
+.button-bar{
+  position: relative;
+  z-index:8;
+  line-height: 35px;
+  background-color: $sec-level;
+  font-size: 16px;
+  color:$primaryFontColor;
+  span{
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    width:33.3%;
+  }
+  .select-name{
+    font-size: 18px;
+  }
+  .btn-cancel{
+    text-align: left;
+    padding-left: 20px;
+    &:hover{
+      cursor: pointer;
+      color:white;
+    }
+  }
+  .btn-sure{
+    text-align: right;
+    padding-right: 20px;
+    &:hover{
+      cursor: pointer;
+      color:white;
+    }
+  }
+}
+.piker-shadow{
+  position: fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  top:0;
+  z-index:4;
+  background-color: rgba(0,0,0,.68);
 }

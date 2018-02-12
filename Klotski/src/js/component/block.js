@@ -6,43 +6,18 @@
  * Description:
  */
 import React from 'react';
-/*import Square from './square';*/
+import Square from './square';
 import {pointer} from "../util/util";
-function Square(props) {
-    const value =props.sequence,
-        level=props.level,
-        size= props.size,
-        offsetSize = props.size+2;
-    let classStr ="square";
-    const styleStr ={
-        width:size,
-        height:size,
-        top:offsetSize*Math.floor(value/level)+'px',
-        left:offsetSize*(value%level)+'px'
-    }
-    if(props.value === 0 ){
-        classStr = classStr + ' empty-block';
-    }
-    return (
-        <li
-            className={classStr}
-            style ={styleStr}
-            onSelect = {(e)=>{e.preventDefault();}}
-            onMouseDown={(e)=>{e.preventDefault(); pointer.listen(e,null,value)}}
-            onTouchStart={(e)=>{ pointer.listen(e,null,value)}}
-        >
-            <span>{props.value}</span>
-        </li>
-    );
-}
-export default class Block extends React.Component{
-    constructor(){
-        super();
-        this.handleEvent = this.handleEvent.bind(this);
 
+export default class Block extends React.Component{
+    constructor(props){
+        super(props);
+        this.size = this.props.size / this.props.level ;
+        this.boxSize = this.props.size + this.props.level+1;
+        this.handleEvent = this.handleEvent.bind(this);
     }
     handleEvent(dir,index){
-        if(dir==='none'){
+        if(this.props.simple || dir==='none'){
             return ;
         }
         this.props.handle(dir,index);
@@ -60,19 +35,17 @@ export default class Block extends React.Component{
         );
     }
     render() {
-        this.size = this.props.size / this.props.level ;
-        this.boxSize = this.props.size + this.props.level+1;
         const _this = this;
         const listItems = this.props.squares.map(function(t,index){
             return _this.renderSquare(index);
         });
-
+        const className = this.props.simple ? 'widget-block add-filter':'widget-block';
         const styleStr ={
             width:this.boxSize+"px",
             height:this.boxSize+"px"
         };
         return (
-            <ul className="widget-block"
+            <ul className={className}
                 style={styleStr}
                 size ={this.size }
                 onSelect = {()=>{return false;}}

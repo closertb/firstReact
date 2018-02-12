@@ -11,18 +11,103 @@
  * */
 export const disorganize = (level) => {
     const length = level * level;
+const arr = [];
+let temp;
+for (var i = 1; i < length; i++) {
+    arr.push(i);
+}
+for (i = 0; i < length; i++) {
+    let random = Math.round(Math.random() * (length - 2));
+    temp = arr[random];
+    arr[random] = arr[i];
+    arr[i] = temp;
+}
+return arr;
+};
+
+export const randomArr = (length) => {
     const arr = [];
     let temp;
-    for (var i = 0; i < length; i++) {
-        arr.push(i);
-    }
-    for (i = 0; i < length; i++) {
-        let random = Math.round(Math.random() * (length - 1));
-        temp = arr[random];
-        arr[random] = arr[i];
-        arr[i] = temp;
+    while(arr.length<(length-1)){
+        let random = 1+Math.round(Math.random() * (length - 2));
+        if(random<length && arr.indexOf(random)===-1){
+            arr.push(random);
+        }
     }
     return arr;
+};
+/**
+ * 作用：根据传入的阶数，生成一个0-length二次方长度的且逆序数为偶数的乱序数组
+ * @params [Number]  矩阵阶数
+ * */
+export const evenInverseNumber = (level) => {
+    const length = level * level;
+    const res = [];
+    let count = 0,k;
+    /**
+     * 数据交换
+     * */
+    const swap=(arr,lastIndex,newIndex)=>{
+        let temp = arr[lastIndex];
+        arr[lastIndex] =arr[newIndex];
+        arr[newIndex] = temp;
+        count++;
+    }
+    /**
+     * 检测逆序奇偶性
+     * */
+    const bubbleOrder=(arr)=>{
+        let i ,j;
+        for(i=0;i<arr.length;i++){
+            for(j=arr.length-1;j>i;j--){
+                (arr[j]<arr[j-1])&&swap(arr,j-1,j);
+            }
+        }
+        return count;
+    }
+    /**
+     * 检测逆序奇序列变偶虚序列
+     * */
+    const transToEven=(arr,index)=>{
+        if(arr[index]>arr[index+1]){
+            swap(arr,index,index+1);
+            return ;
+        }
+        transToEven(arr,index+1);
+    };
+    for (k = 1; k < length; k++) {
+        res.push(k);
+    }
+    for (k = 0; k < length-1; k++) {
+        let random = Math.round(Math.random() * (length - 2));
+        swap(res,random,k)
+    }
+    count = 0;
+    bubbleOrder(res.slice());
+    var val = count%2 + (level%2)*5 ;
+    k =Math.floor(Math.random()*length)+1;
+    k = (k>length-2)? (length-5) : k ;
+    let row = Math.floor(k/level);
+    switch(val){
+        case 0:   //偶序列，偶数行,生成一个偶数行的空值位置
+            if(row%2===0){  //奇数行
+                k =k+level;
+            }
+            break;
+        case 1:   //奇序列，偶数行，生成一个奇数行的空值位置
+            if(row%2){  //偶数行
+                k =k-level;
+            }
+            break;
+        case 5:  //偶序列，奇数行
+            break;
+        case 6:  //奇序列，奇数行
+            transToEven(res,0);
+            break;
+    }
+
+    res.splice(k,0,0);
+    return res;
 };
 /**
  * 作用：根据传入的阶数，现索引位置，方向，返回沿传入方向移动一个单位后的位置；
@@ -151,3 +236,4 @@ export const arrayGenerate =(length)=>{
     items.push(0);
     return items ;
 }
+export const Path ='Klotski';

@@ -7,46 +7,39 @@
  */
 import React from 'react';
 import Block from '../component/block';
-import {disorganize, getTargetState, timer} from '../util/util';
-
-const level = 5,length=level*level;
+import ShadowBox from '../component/shadow';
+import {randomArr, getTargetState,evenInverseNumber} from '../util/util';
+import {Link} from 'react-router-dom';
 
 function Status(props) {
-    const className = props.isSuccess ? 'show-status success-status' : 'show-status';
-    const str =  props.isSuccess ? '成功了':props.value;
-    return (
-        <div className={className}>{str}</div>
-    );
-}
-function ShadowBox(props) {
-    if(props.isShow){
+    const formatter=(t)=>{
+        const res =t>9 ? t : '0'+t
+        return res;
+    }
+    if(props.isSuccess){
         return (
-            <div className="shadow-box">
-                <div className="vertical-box">
-                    <div className="shadow-info"><span>暂停</span></div>
-                    <div className="shadow-event">
-                        <span className="home-button"></span>
-                        <span className="start-button" onClick={props.startHandle}></span>
-                        <span className="reset-button" onClick={props.resetHandle}></span>
-                    </div>
-                </div>
-            </div>);
+            <div className="show-status success-status">成功了</div>
+        );
     }else{
-       return (
-           <div className="stop-button" onClick={props.pauseHandle}></div>
-       );
+        return (
+            <div className="show-status">{props.value} <span className="total-step">{formatter(props.step)}</span></div>
+        );
     }
 
 }
+
 export default class Game extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+        this.level = this.props.location.query.level;
+        this.length = this.level * this.level;
         this.state = {
             success: false,
-            level: level,
+            level: this.level,
             time:'00:00:00',
             timePass:0,
-            squares: disorganize(level),
+            step:0,
+            squares: evenInverseNumber(this.level),
             showShadow:false
         };
         this.handleClick = this.handleClick.bind(this);
@@ -86,7 +79,7 @@ export default class Game extends React.Component {
     }
     handleClick(dir, index) {
         const squares = this.state.squares.slice();
-        const newIndex = getTargetState(level, index, dir);
+        const newIndex = getTargetState(this.level, index, dir);
         if (newIndex === index || squares[newIndex] !== 0) {
             return;
         }
@@ -94,19 +87,20 @@ export default class Game extends React.Component {
         squares[index] = squares[newIndex];
         squares[newIndex] = temp;
         var isSuccess = squares.every((t, index) => {
-            return t === (index + 1)%length;
+            return t === (index + 1)%this.length;
         });
-
         if (isSuccess) {
             clearInterval(this.interId);
             this.setState({
                 squares: squares,
-                success: true
+                success: true,
+                step:this.state.step+1
             });
             console.log(this.state.time);
         } else {
             this.setState({
-                squares: squares
+                squares: squares,
+                step:this.state.step+1
             });
         }
     };
@@ -123,28 +117,37 @@ export default class Game extends React.Component {
         this.timer(this.state.timePass);
     }
     resetClick(){
-        console.log('click:reset');
         this.setState({
             showShadow:false,
             time:'00:00:00',
             timePass:0,
-            squares:disorganize(level)
+            step:0,
+            level:this.level,
+            squares:evenInverseNumber(this.level)
         });
         this.timer(0);
     }
     render() {
         return (
             <div className="game-box">
-                <Status value={this.state.time} isSuccess={this.state.success}/>
+                <Status value={this.state.time}
+                        isSuccess={this.state.success}
+                        step ={ this.state.step}
+                />
                 <Block
                     handle={this.handleClick}
                     level={this.state.level}
                     squares={this.state.squares}
                     size = {this.blockSize}
+                    simple ={false}
                 />
                 <ShadowBox
                     isShow ={ this.state.showShadow }
                     isSuccess = {this.state.success }
+                    level={this.state.level}
+                    time ={this.state.time}
+                    timePass = {this.state.timePass}
+                    step = {this.state.step}
                     pauseHandle = { this.pauseClick }
                     startHandle ={ this.startClick}
                     resetHandle ={ this.resetClick}
