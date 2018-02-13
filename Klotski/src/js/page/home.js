@@ -9,7 +9,6 @@ import React from 'react';
 import {Link} from 'react-router-dom';
 
 import Picker from "../component/picker";
-import {Icons} from '../component/icon';
 
 export default class Home extends React.Component {
         constructor(props) {
@@ -67,6 +66,11 @@ export default class Home extends React.Component {
                         <li><Link to={routes.level5}>5x5</Link></li>
                         <li onClick={this.showPicker}>更<span>多...</span></li>
                     </ul>
+                    <a herf="http://closertb.site/" className="about">
+                        <svg>
+                            <use xlinkHref="#aboutIcon"></use>
+                        </svg>
+                    </a>
                     <Picker selectHandle={this.selectIndex} isShow ={this.state.showPiker} closeHandle={this.closePicker}/>
                 </div>);
         }

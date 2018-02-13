@@ -13,6 +13,7 @@ import {HashRouter as Router, Route, Link, Switch} from 'react-router-dom'
 import Game from './page/game';
 import Simple from "./page/simple";
 import Home from "./page/home";
+import {Icons} from './component/icon';
 
 
 
@@ -27,6 +28,7 @@ class Root  extends React.Component {
     render(){
         return (<Router>
             <div>
+                <Icons/>
                 <Route exact path='/' component={Home}/>
                 <Route path='/game' component={Game}/>
                 <Route path='/simple' component={Simple}/>

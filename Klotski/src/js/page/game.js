@@ -96,7 +96,6 @@ export default class Game extends React.Component {
                 success: true,
                 step:this.state.step+1
             });
-            console.log(this.state.time);
         } else {
             this.setState({
                 squares: squares,
