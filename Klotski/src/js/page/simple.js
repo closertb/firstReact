@@ -20,11 +20,18 @@ function Status(props) {
         </div>
     );
 }
-
+const  translateKey =(str)=>{
+    var arr = str.substr(1).split('&'),res={};
+    arr.forEach((t)=>{
+        let couple = t.split('=');
+        res[couple[0]] = couple[1];
+    });
+    return res;
+}
 export default class Simple extends React.Component {
     constructor(props) {
         super(props);
-        this.level = this.props.location.query.level;
+        this.level = +translateKey(this.props.location.search).level;
         this.length = this.level * this.level;
         this.state = {
             level: this.level,
@@ -37,7 +44,6 @@ export default class Simple extends React.Component {
 
     handleClick(dir, index) {
     };
-
     render() {
         const link = {
             pathname: '/game',
