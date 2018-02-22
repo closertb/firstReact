@@ -236,4 +236,3 @@ export const arrayGenerate =(length)=>{
     items.push(0);
     return items ;
 }
-export const Path ='Klotski';
