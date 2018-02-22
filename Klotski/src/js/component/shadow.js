@@ -14,15 +14,9 @@ export default function ShadowBox(props) {
         '4':[40000,120000,200000],
         '5':[100000,600000,1000000]
 
-    },path={
-        pathname: '/simple',
-        query: {
-            level: props.level
-        }
-    };
+    },path = '/simple?level='+props.level;
     let word ='';
     if(props.isSuccess){
-        console.log('pass',props.timePass);
         const records = jokers[props.level];
         if(props.timePass < records[0]){
             word ='大神啊，快膜拜 ！';

@@ -13,7 +13,7 @@ import {Link} from 'react-router-dom';
 
 function Status(props) {
     const formatter=(t)=>{
-        const res =t>9 ? t : '0'+t
+        const res =t>9 ? t : '0'+t;
         return res;
     }
     if(props.isSuccess){
