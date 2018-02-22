@@ -29,3 +29,4 @@ npm install 下载所需要的依赖
           |--square.js   滑动块组件(最小的组件块)
       |--util            通用js方法定义
    |--images   svg文件
+

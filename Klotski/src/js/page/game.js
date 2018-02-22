@@ -54,7 +54,7 @@ export default class Game extends React.Component {
     }
     timer(offsetTime){
         const formatter=(t)=>{
-            const res =t>9 ? t : '0'+t
+            const res =t>9 ? t : '0'+t;
             return res;
         }
         let startTime = new Date().getTime(),tPass=0,tOffset=offsetTime||0;

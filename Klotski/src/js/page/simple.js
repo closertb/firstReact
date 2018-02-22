@@ -44,7 +44,6 @@ export default class Simple extends React.Component {
 
     handleClick(dir, index) {
     };
-
     render() {
         const link = {
             pathname: '/game',

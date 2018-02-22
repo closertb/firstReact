@@ -65,7 +65,6 @@ export default class Picker extends React.Component {
         this.props.closeHandle();
     }
     cancelClick(){
-        console.log('cancel');
         this.props.closeHandle();
     }
     getPos(e){
