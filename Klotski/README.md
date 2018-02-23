@@ -1,13 +1,11 @@
 ````
-##
-开发一个 数字华容道游戏
-##
-git clone 过后首先执行 
+##  开发一个 数字华容道游戏
+## 下载并安装依赖
+git clone 过后首先执行
+
 npm install 下载所需要的依赖
-##
-打包命令 ：npm run build
-##
-启动服务+打包 ：npm run dev （包含热加载功能）
+##  打包命令 ：npm run build
+##  启动服务+打包 ：npm run dev （包含热加载功能）
 
 ## 一些说明 ##
 |--index.html  模板文件
