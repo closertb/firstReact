@@ -231,8 +231,8 @@ export const timer ={
 export const arrayGenerate =(length)=>{
     const items =[];
     for(let i=1;i<length;i++){
-        items.push(i);
+        items.push({value:i});
     }
-    items.push(0);
+    items.push({value:0});
     return items ;
 }

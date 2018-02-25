@@ -18,11 +18,7 @@ export default function Square(props) {
     const styleStr ={
         width:size,
         height:size,
-        top:offsetSize*Math.floor(value/level)+'px',
-        left:offsetSize*(value%level)+'px'
-    }
-    if(props.value === 0 ){
-        classStr = classStr + ' empty-block';
+        transform:'translate('+offsetSize*(value%level)+'px,'+offsetSize*Math.floor(value/level)+'px)'
     }
     return (
         <li

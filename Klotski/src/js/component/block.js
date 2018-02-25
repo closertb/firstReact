@@ -22,8 +22,8 @@ export default class Block extends React.Component{
         }
         this.props.handle(dir,index);
     }
-    renderSquare(i) {
-        let val = this.props.squares[i];
+    renderSquare(prop,i) {
+        let val = prop.value;
         if(val === 0 ){
             return null;
         }
@@ -40,7 +40,7 @@ export default class Block extends React.Component{
     render() {
         const _this = this;
         const listItems = this.props.squares.map(function(t,index){
-            return _this.renderSquare(index);
+            return _this.renderSquare(t,index);
         });
         const className = this.props.simple ? 'widget-block add-filter':'widget-block';
         const styleStr ={

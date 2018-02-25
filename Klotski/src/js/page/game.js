@@ -33,13 +33,19 @@ export default class Game extends React.Component {
         super(props);
         this.level = this.props.location.query.level;
         this.length = this.level * this.level;
+        const squares =evenInverseNumber(this.level);
         this.state = {
             success: false,
             level: this.level,
             time:'00:00:00',
             timePass:0,
             step:0,
-            squares: evenInverseNumber(this.level),
+            //will change
+            squares: squares.map((t)=>{
+                return {
+                    value:t
+                };  //存储成索引和值的形式，属性名保持和数组索引一致
+            }),
             showShadow:false
         };
         this.handleClick = this.handleClick.bind(this);
@@ -80,15 +86,19 @@ export default class Game extends React.Component {
     handleClick(dir, index) {
         const squares = this.state.squares.slice();
         const newIndex = getTargetState(this.level, index, dir);
-        if (newIndex === index || squares[newIndex] !== 0) {
+        console.log('seq',squares);
+        //will change
+        if (newIndex === index || squares[newIndex].value !== 0) {
             return;
         }
-        let temp = squares[index];
-        squares[index] = squares[newIndex];
-        squares[newIndex] = temp;
-        var isSuccess = squares.every((t, index) => {
-            return t === (index + 1)%this.length;
+        let temp = squares[index].value;
+        squares[index].value = squares[newIndex].value;
+        squares[newIndex].value = temp;
+        var isSuccess = squares.every((t,index) => {
+            return t.value === (index + 1)%this.length;
         });
+
+
         if (isSuccess) {
             clearInterval(this.interId);
             this.setState({
@@ -102,6 +112,7 @@ export default class Game extends React.Component {
                 step:this.state.step+1
             });
         }
+        console.log('sta',this.state.squares);
     };
     pauseClick(){
         clearInterval(this.interId);
