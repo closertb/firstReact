@@ -24,6 +24,9 @@ export default class Block extends React.Component{
     }
     renderSquare(i) {
         let val = this.props.squares[i];
+        if(val === 0 ){
+            return null;
+        }
         return (
             <Square
                 value={val}
