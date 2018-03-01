@@ -14,6 +14,7 @@ import Game from './page/game';
 import Simple from "./page/simple";
 import Home from "./page/home";
 import {Icons} from './component/icon';
+import CityPicker from './page/cityPicker';
 
 
 
@@ -35,8 +36,14 @@ class Root  extends React.Component {
             </div>
         </Router>)
     }
+}
 
+class Treat extends React.Component{
+    render(){
+        return (<CityPicker>
+        </CityPicker>)
+    }
 }
 render((
-    <Root />
+    <Treat />
 ), document.getElementById('app'));
