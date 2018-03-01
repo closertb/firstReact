@@ -55,8 +55,6 @@ export default class Pickers extends React.Component {
         this.handleClick = this.handleClick.bind(this);
         this.cancelClick = this.cancelClick.bind(this);
         this.callBack = this.callBack.bind(this);
-        console.log(city);
-        console.log(this.getCitySource(props.cityPicker));
     }
     eventListen(e){
         this.eve.pointer.end =this.getPos(e).y;
@@ -237,7 +235,7 @@ export default class Pickers extends React.Component {
                 <div className="piker-shadow"></div>
                 <div className="button-bar">
                     <span className="btn-cancel" onClick={this.cancelClick}>取消</span>
-                    <span className="select-name">选择城市</span>
+                    <span className="select-name">{this.props.title || '选择'}</span>
                     <span className="btn-sure" onClick={this.handleClick}>确定</span>
                 </div>
                 <div className="picker-contents">

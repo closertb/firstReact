@@ -37,7 +37,9 @@ class Root  extends React.Component {
         </Router>)
     }
 }
-
+/**
+* picker组件测试程序
+* */
 class Treat extends React.Component{
     render(){
         return (<CityPicker>
@@ -45,5 +47,5 @@ class Treat extends React.Component{
     }
 }
 render((
-    <Treat />
+    <Root />
 ), document.getElementById('app'));

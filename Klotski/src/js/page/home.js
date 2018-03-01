@@ -8,7 +8,7 @@
 import React from 'react';
 import {Link} from 'react-router-dom';
 
-import Picker from "../component/picker";
+import Pickers from "../component/pickers";
 
 export default class Home extends React.Component {
     constructor(props) {
@@ -22,7 +22,8 @@ export default class Home extends React.Component {
     }
 
     selectIndex(e) {
-        const path = '/simple?level=' + e;
+        console.log(e)
+        const path = '/simple?level=' + e[0];
         this.props.history.push(path);
     }
 
@@ -50,7 +51,7 @@ export default class Home extends React.Component {
                         <use xlinkHref="#aboutIcon"></use>
                     </svg>
                 </a>
-                <Picker selectHandle={this.selectIndex} isShow={this.state.showPiker} closeHandle={this.closePicker}/>
+                <Pickers sources ={[{index:2,data:[3,4,5,6,7,8,9]}]} title='选择阶数' selectHandle={this.selectIndex} isShow={this.state.showPiker} closeHandle={this.closePicker}/>
             </div>);
     }
 };

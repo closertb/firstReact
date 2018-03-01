@@ -8,6 +8,108 @@
     <title>Klotski</title>
 </head>
 <body>
+<div id="app"></div>
+<script>
+    var a =10;
+    function b() {
+      //  console.log(a)
+    }
+    (function (c) {
+        var a=20;
+        c();
+    })(b)
 
+    var d = [];
+    for(var k=0;k<3;k++){
+        d[k] = ()=>{
+            console.log(k);
+        }
+    }
+    d[0]();
+    d[1]();
+    d[2]();
+    var deO ={
+        a:'sd',
+        b:[1,2,3,4],
+        k:'not',
+        c:{
+            a:'tang',
+            b:'dan',
+            c:[1,2,3,4]
+        }
+
+    }
+    var O = {
+        a:'fuck',
+        b:[1,2,3,4,5],
+        c:{
+            a:'simon',
+            b: 'closet'
+        }
+    }
+
+    function objectisObject(value) {
+        return (value !== null && Object.prototype.toString.call(value) === '[object Object]');
+    }
+    function clone(source) {
+        if (Array.isArray(source)) {
+            return source.map(clone);
+        }
+        if (objectisObject(source)) {
+            let target = {};
+            let keys = Object.keys(source);
+            let klen = keys.length;
+            let k = 0;
+            for (; k < klen; ++k) {
+                target[keys[k]] = clone(source[keys[k]]);
+            }
+            return target;
+        }
+
+        return source;
+    }
+    /*
+    *target 合并后的新对象
+    *source 原始对象
+    *options 用户设定对象
+    * */
+    function _merger(key, target, source, options) {
+        let tval = options[key];
+        let sval = source[key];
+
+        if (objectisObject(tval)&&objectisObject(sval)) {
+            let res = {};
+            target[key]=merge(res,sval,tval);
+        }else {
+            target[key] = tval?clone(tval):clone(sval);
+        }
+    }
+    /*
+    *target 合并后的新对象
+    *source 原始对象
+    *options 用户设定对象
+    * */
+    function merge(target, source, options) {
+        let sources = Array.isArray(source) ? source : [source];
+        let ilen = sources.length;
+        let i, keys, klen, k;
+
+        options = options || {};
+
+        for (i = 0; i < ilen; ++i) {
+            source = sources[i];
+            if (!objectisObject(source)) {
+                continue;
+            }
+            keys = Object.keys(source);
+            for (k = 0, klen = keys.length; k < klen; ++k) {
+                _merger(keys[k], target, source, options);
+            }
+        }
+        return target;
+    }
+    console.log(merge({},deO,O));
+
+</script>
 </body>
 </html>
