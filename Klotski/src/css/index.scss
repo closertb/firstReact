@@ -369,52 +369,7 @@ ol, ul, li {
   }
 }
 
-.picker-module {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  &.none {
-    display: none;
-  }
-  .picker-content {
-    position: relative;
-    z-index: 7;
-    background-color: white;
-    overflow: hidden;
-  }
-  li {
-    height: 35px;
-    line-height: 35px;
-    text-align: center;
-  }
-  .opacity-layer {
-    position: relative;
-    z-index: 8;
-    li {
-      background-color: rgba(225, 225, 225, 0.6);
-      &.curry {
-        border: 1px solid rgba(225, 225, 225, 0.7);
-        background-color: rgba(225, 225, 225, 0.2);
-      }
-    }
 
-  }
-  .select-list {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 6;
-    font-size: 1rem;
-    transition: font 0.3s, transform 0.5s ease-out;
-    color: $darkBluefontColor;
-    .curry {
-      font-size: 1.2rem;
-    }
-  }
-
-}
 
 .button-bar {
   position: relative;
@@ -457,5 +412,62 @@ ol, ul, li {
   right: 0;
   top: 0;
   z-index: 4;
-  background-color: rgba(0, 0, 0, .68);
+  background-color: rgba(0, 0, 0, 0);//.68
+}
+
+.city-picker{
+
+}
+
+.picker-module {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  &.none {
+    display: none;
+  }
+  .picker-contents{
+    position: relative;
+    z-index: 7;
+    display: flex;
+    justify-content: flex-start;
+    background-color: white;
+  }
+  .picker-content {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  li {
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+  }
+  .opacity-layer {
+    position: relative;
+    z-index: 8;
+    li {
+      background-color: rgba(225, 225, 225, 0.6);
+      &.curry {
+        border: 1px solid rgba(225, 225, 225, 0.7);
+        border-left:none ;
+        border-right:none ;
+        background-color: rgba(225, 225, 225, 0.2);
+      }
+    }
+
+  }
+  .select-list {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 6;
+    font-size: 1.2rem;
+    transition: font 0.3s, transform 0.5s ease-out;
+    color: $darkBluefontColor;
+
+  }
+
 }
