@@ -1,0 +1,172 @@
+@import "theme";
+
+body {
+  font: normal 16px "Microsoft Yahei", Futura, sans-serif;
+  height: 100%;
+  background-color: $titleBgColor;
+}
+
+$bottonBg: $auxiliaryColor07;
+div, p, ul, li, h2, h3, h4 {
+  margin: 0;
+  padding: 0;
+}
+
+ol, ul, li {
+  list-style: none;
+}
+
+
+
+.home-page {
+  margin-top: 50px;
+  text-align: center;
+  color: $primaryFontColor;
+  h2 {
+    line-height: 1.5em;
+  }
+  h3 {
+    line-height: 2em;
+  }
+  a.about {
+    position: fixed;
+    right: 15px;
+    top: 15px;
+    text-decoration: none;
+    svg {
+      height: 35px;
+      width: 35px;
+      fill: $wirtefontColor;
+    }
+    &:hover {
+      color: $darkBluefontColor;
+      transition: all 0.3s;
+      svg {
+        fill: $defautFontColor;
+      }
+    }
+  }
+  .level-items {
+    margin-top: 50px;
+    line-height: 3rem;
+    color: $e05;
+    li {
+      font-weight: bold;
+      margin: 20px auto 0;
+      width: 25rem;
+      font-size: 1.5rem;
+      text-align: left;
+      padding-left:1rem;
+      background-color: white;
+      border-radius: 1.5rem;
+      letter-spacing: 0.5rem;
+      span{
+        font-size: 1.3rem;
+      }
+      label{
+        font-size: 1rem;
+      }
+    }
+  }
+}
+
+
+
+.button-bar {
+  position: relative;
+  z-index: 8;
+  line-height: 35px;
+  background-color: $sec-level;
+  font-size: 16px;
+  color: $primaryFontColor;
+  span {
+    display: inline-block;
+    box-sizing: border-box;
+    text-align: center;
+    width: 33.3%;
+  }
+  .select-name {
+    font-size: 18px;
+  }
+  .btn-cancel {
+    text-align: left;
+    padding-left: 20px;
+    &:hover {
+      cursor: pointer;
+      color: white;
+    }
+  }
+  .btn-sure {
+    text-align: right;
+    padding-right: 20px;
+    &:hover {
+      cursor: pointer;
+      color: white;
+    }
+  }
+}
+
+.piker-shadow {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 4;
+  background-color: rgba(0, 0, 0, .68);//.68
+}
+
+.city-picker{
+
+}
+
+.picker-module {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 5;
+  &.none {
+    display: none;
+  }
+  .picker-contents{
+    position: relative;
+    z-index: 7;
+    display: flex;
+    justify-content: flex-start;
+    background-color: white;
+  }
+  .picker-content {
+    position: relative;
+    width: 100%;
+    overflow: hidden;
+  }
+  li {
+    height: 35px;
+    line-height: 35px;
+    text-align: center;
+  }
+  .opacity-layer {
+    position: relative;
+    z-index: 8;
+    li {
+      background-color: rgba(225, 225, 225, 0.6);
+      &.curry {
+        border: 1px solid rgba(225, 225, 225, 0.7);
+        border-left:none ;
+        border-right:none ;
+        background-color: rgba(225, 225, 225, 0.2);
+      }
+    }
+
+  }
+  .select-list {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 6;
+    font-size: 1.2rem;
+    transition: font 0.3s, transform 0.5s ease-out;
+    color: $darkBluefontColor;
+  }
+}
