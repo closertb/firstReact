@@ -24,7 +24,7 @@ const reducer = (state = 0, action) => {
 };
 
 function* helloSaga() {
-    console.log('Hello Sagas!');
+    console.log('Hello Sagas!,its a joke');
 }
 
 const delay = ms => new Promise(resolve => setTimeout(resolve, ms));
@@ -50,4 +50,6 @@ export const store = createStore(
 sagaMiddleware.run(watchIncrementAsync);
 
 
-
+const add = function(m,k){
+    return m+k;
+}
