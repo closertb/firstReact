@@ -19,7 +19,7 @@ ol, ul, li {
 
 
 .home-page {
-  margin-top: 50px;
+  margin-top: 80px;
   text-align: center;
   color: $primaryFontColor;
   h2 {
@@ -168,5 +168,15 @@ ol, ul, li {
     font-size: 1.2rem;
     transition: font 0.3s, transform 0.5s ease-out;
     color: $darkBluefontColor;
+  }
+}
+
+.counter{
+  button{
+    display: inline-block;
+    width:42px;
+    height:42px;
+    margin: 10px;
+    font:bold 35px/42px 'Microsoft Himalaya';
   }
 }

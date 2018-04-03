@@ -5,12 +5,14 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const webpack = require('webpack');
 module.exports = {
     entry: './src/js/index.js',
+    devtool: "source-map",
     output: {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
     devServer: {
         host: '0.0.0.0',
+        hot:true,
         inline: true,
         port: 8089,
         contentBase: './dist'

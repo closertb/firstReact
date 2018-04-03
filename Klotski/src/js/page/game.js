@@ -86,7 +86,6 @@ export default class Game extends React.Component {
     handleClick(dir, index) {
         const squares = this.state.squares.slice();
         const newIndex = getTargetState(this.level, index, dir);
-        console.log('seq',squares);
         //will change
         if (newIndex === index || squares[newIndex].value !== 0) {
             return;

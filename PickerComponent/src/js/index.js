@@ -11,13 +11,12 @@ import React from 'react';
 import {render} from 'react-dom'
 
 import {Icons} from './component/icon';
-import Pickers from './component/pickers';
+import Pickers from './lib/pickers';
+import Counter from './component/counter'
 
+import {createStore, combineReducers} from 'redux'
 
-/*
-export default class Game extends React.Component {
-
-}*/
+import { store } from './store/reducers';
 
 
 /**
@@ -29,11 +28,16 @@ class Treat extends React.Component{
         this.state ={
             showPicker:[false,false,false,false],
             res:['','','',''],
-            workId:''
+            workId:'',
+            value:store.getState()
         };
         this.selectIndex = this.selectIndex.bind(this);
         this.showPicker = this.showPicker.bind(this);
         this.closePicker = this.closePicker.bind(this);
+        this.showLog = this.showLog.bind(this);
+    }
+    showLog(){
+        this.setState({value:store.getState()});
     }
     closePicker() {
         this.setState({showPicker:[false,false,false,false]})
@@ -49,6 +53,9 @@ class Treat extends React.Component{
         res[id] = e.join('-');
         this.setState({showPicker:[false,false,false,false],res:res});
     }
+    componentDidMount(){
+        store.subscribe(this.showLog);
+    }
     render(){
         const wordData = ['sb','fu','ck','nb','gwz'];
         const params = {
@@ -57,6 +64,7 @@ class Treat extends React.Component{
         };
         return (
             <div className="home-page">
+                <span>{ this.state.value }</span>
                 <Icons/>
                 <ul className="level-items">
                     <li onClick={()=>{this.showPicker(0)}}>
@@ -101,6 +109,7 @@ class Treat extends React.Component{
                          isShow={this.state.showPicker[3]}
                          closeHandle={this.closePicker}
                 />
+                <Counter />
             </div>
         )
     }
