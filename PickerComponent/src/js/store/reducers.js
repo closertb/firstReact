@@ -63,5 +63,3 @@ function curry(fn) {
 function add(num1,num2) {
     return num1 + num2 ;
 }
-
-console.log(curry(add,5,8)(7));
