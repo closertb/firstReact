@@ -7,9 +7,13 @@
  */
 import React from 'react';
 import {city} from '../util/city';
+
+const LineHeight = 40;
+const RollingAngle = -30;
+const DaySeconds=1000*60*60*24;
 /**
  * 作用：改写ES5 ARRAY的some方法
- * 区别：这个当存在时，返回的数值不是true，而是其所在的索引值
+ * 区别：当这个值存在数组中时，返回的数值不是true，而是其所在的索引值
  * @param  {[function]}   callback 回调函数
  * */
 Array.prototype.someIndex = function (callback) {
@@ -25,85 +29,54 @@ Array.prototype.someIndex = function (callback) {
     return res;
 };
 function Item(props) {
+    const { str, value } = props;
     return (
-        <li className="item" style={props.str}>
-            {props.value}
+        <li className="item" style={str}>
+            {value}
         </li>
     );
 }
+function PickerItem(props){
+    const { data, onStartListen, selectIndex, level } = props;
+    if(data && data.length === 0){
+        return null
+    }
+    const itemList = data.map((t,index)=>{
+        let diff = selectIndex - index,styleStr={};
+        if(Math.abs(diff)<4){
+            styleStr = {
+                transform: 'rotateX('+diff*RollingAngle+'deg)'
+            };
+            return (<Item value={t} isCurry={!diff} key={t} str={styleStr}/>);
+        }
+        return (<Item value={t}  key={t} str={styleStr}/>)
+    })
+    const styleStr = {
+        transform: 'translate(0,'+(2-selectIndex)*LineHeight+'px)'
+    };
 
+    return (
+        <div className="picker-content"
+             onMouseDown={(e)=>{e.preventDefault();onStartListen(e, level)}}
+             onTouchStart={(e)=>{e.preventDefault();onStartListen(e, level)}}
+        >
+            <ul className="opacity-layer">
+                <li></li>
+                <li></li>
+                <li className="curry"></li>
+                <li></li>
+                <li></li>
+            </ul>
+            <ul className="select-list" style={styleStr}>
+                {itemList}
+            </ul>
+        </div>);
+}
 class Picker extends React.Component {
     constructor(props){
         super(props);
         this.eve ={
-            status:props.status,
-            type:'none',
-            level:props.level,
-            pointer:{
-                start:props.position,
-                end:props.position,
-                xPos:0
-            }
-        };
-        this.startListen = this.startListen.bind(this);
-    }
-    startListen(e){
-
-        /*this.eve.pointer.end =this.getPos(e).y;
-        this.moveDistance(this.eve.pointer);
-        this.eve.status = false;*/
-        this.props.event(this.props.level,this.getPos(e).y)
-    }
-    getPos(e){
-        return {
-            x:e.screenX || e.changedTouches[0].pageX,
-            y:e.screenY || e.changedTouches[0].pageY,
-        }
-    };
-    render(){
-        if(this.props.data && this.props.data.length ===0 ){
-            return null
-        }
-        const itemList = this.props.data.map((t,index)=>{
-            let diff = Math.abs(this.props.index - index),styleStr={};
-
-            if(diff<3){
-                styleStr = {
-                    transform: 'rotateX('+diff*25+'deg)'
-                };
-                return (<Item value={t} isCurry={!diff} key={t} str={styleStr}/>);
-            }
-            return (<Item value={t}  key={t} str={styleStr}/>)
-        })
-        const styleStr = {
-            transform: 'translate(0,'+(2-this.props.index)*35+'px)'
-        };
-
-        return (
-            <div className="picker-content"
-                 onMouseDown={(e)=>{e.preventDefault();this.startListen(e)}}
-                 onTouchStart={(e)=>{e.preventDefault();this.startListen(e)}}
-            >
-                <ul className="opacity-layer">
-                    <li></li>
-                    <li></li>
-                    <li className="curry"></li>
-                    <li></li>
-                    <li></li>
-                </ul>
-                <ul className="select-list" style={styleStr}>
-                    {itemList}
-                </ul>
-            </div>)
-    }
-}
-export default class Pickers extends React.Component {
-    constructor(props){
-        super(props);
-        let isCityPicker = props.cityPicker && props.cityPicker.isCityPicker;
-        this.eve ={
             status:false,
-            isCityPicker:isCityPicker,
             type:'none',
             level:0,
             pointer:{
@@ -111,33 +84,50 @@ export default class Pickers extends React.Component {
                 end:0
             }
         };
-        this.state ={
-            status:false,
-            position:0,
-            sources: isCityPicker ? this.getCitySource(props.cityPicker) : props.sources
-        };
-        this.eventListen = this.eventListen.bind(this);
+        this.state ={};
         this.handleClick = this.handleClick.bind(this);
         this.cancelClick = this.cancelClick.bind(this);
-        this.callBack = this.callBack.bind(this);
+        this.onStartListen = this.onStartListen.bind(this);
+        this.onMoveListen = this.onMoveListen.bind(this);
+        this.onEndListen = this.onEndListen.bind(this);
     }
-    eventListen(e){
+    componentDidMount() {
+        const target = document.querySelector('.js-picker-module');
+        target.addEventListener('touchmove', (e) =>{
+          e.preventDefault();
+          e.stopPropagation();
+        }, false);
+      }    
+    onStartListen(e,level){
+        const point = this.getPos(e).y;
+        const newEve = {
+            level,
+            status: true,
+            pointer:{
+                start: point,
+                end: point
+            },
+            startTime: (new Date()).getTime()
+        }
+        this.eve = { ...this.eve, ...newEve };
+    }
+    onMoveListen(e){
         this.eve.pointer.end =this.getPos(e).y;
         this.moveDistance(this.eve.pointer);
         this.eve.status = false;
     }
-    callBack(level,pos){
-        this.eve.level = level;
-        this.eve.status = true;
-        this.eve.pointer.start = pos;
-        this.eve.pointer.end = pos;
-    }
+    onEndListen(e){
+        this.eve.pointer.end =this.getPos(e).y;
+        this.moveDistance(this.eve.pointer);
+        this.eve.status = false;
+    }        
     handleClick(){
-        const res = this.state.sources.map((t,index)=>{
+        const { selectHandle, closeHandle, sources } = this.props;
+        const res = sources.map((t,index)=>{
             return t.data[t.index];
         });
-        this.props.selectHandle(res);
-        this.props.closeHandle();
+        selectHandle(res);
+        closeHandle();
     }
     cancelClick(){
         this.props.closeHandle();
@@ -149,55 +139,140 @@ export default class Pickers extends React.Component {
         }
     };
     moveDistance(pointer){
-        if(!this.eve.status){
+        const { status, level } = this.eve;
+        if(!status){
             return ;
         }
-        let sources = this.state.sources.slice(),target = sources[this.eve.level];
+        const target = this.props.sources[level];
 
         let md =pointer.start - pointer.end,top=0;
         if( Math.abs(md)<5){
             return ;
         }
         top= top - md;
-
-        let newIndex = target.index - Math.round(top/35);
+        let newIndex = target.index - Math.round(top/LineHeight);
         if(newIndex< 0){
             newIndex =0;
         }
         if(newIndex>(target.data.length-1)){
             newIndex = target.data.length-1;
         }
-        if(this.eve.isCityPicker && this.eve.level<2){
-            if(this.eve.level){
-                sources[1].index = newIndex;
-                sources[2].data = city[sources[0].index].sub[sources[1].index].sub.map((t)=>{
-                    return t.name ;
-                });
-                sources[2].index = 0;
-            }else{
-                sources = this.getCitySource({province:sources[0].data[newIndex]});
+        // 设定下一个节拍，数据集的样子
+        this.props.handleChange(level,newIndex);
+    }
+    render(){
+        const { sources, title } = this.props;
+        const PickerLists = sources.map(({data, index},level)=>{
+            const pickerProps = {
+                key:level,
+                data,
+                selectIndex: index,
+                level,
+                onStartListen: this.onStartListen
             }
-        }else{
-            sources[this.eve.level].index = newIndex;
+            return (<PickerItem {...pickerProps}/>)
+        });
+        return (
+            <div className="picker-module js-picker-module"
+                 onMouseUp={ e=>{ this.onEndListen(e)}}
+                 onTouchEnd={ e=>{this.onEndListen(e)}}
+                 onTouchMove={ e=>{this.onMoveListen(e)}}
+            >
+                <div className="piker-shadow"></div>
+                <div className="button-bar">
+                    <span className="btn-cancel" onClick={this.cancelClick}>取消</span>
+                    <span className="select-name">{title || '选择'}</span>
+                    <span className="btn-sure" onClick={this.handleClick}>确定</span>
+                </div>
+                <div className="picker-contents">
+                    { PickerLists }
+                </div>
+            </div>)
+    }
+}
+export default class CommonPicker extends React.Component {
+    constructor(props){
+        super(props);
+        this.state ={ sources: props.sources};      
+        this.handleChange = this.handleChange.bind(this); 
+        this.colseHandle = this.colseHandle.bind(this);
+        this.selectHandle = this.selectHandle.bind(this);
+    }
+    componentWillReceiveProps(nextProps){
+        if(nextProps !== this.props) {
+            this.setState({ sources: nextProps.sources})
         }
+    }
+    handleChange(level, newIndex){
+        const sources = this.state.sources.slice();
+        sources[level].index = newIndex;
+        this.setState({ sources });
+    }
+    selectHandle(){
+        console.log('get res');
+    }
+    colseHandle(){
+        console.log('close res');
+    }
+    render(){
+        const { handleChange, selectHandle, closeHandle, title, isShow} = this.props;
+        const pikerProps ={
+            title,
+            sources: this.state.sources,
+            handleChange: handleChange || this.handleChange,
+            selectHandle: selectHandle || this.selectHandle,
+            closeHandle: closeHandle || this.closeHandle
+        }
+    return isShow ? (<Picker {...pikerProps} />) : null;
+    }
+}
 
-        this.setState({sources:sources});
+/* 城市选择器*/
+export class CityPicker extends React.Component {
+    constructor(props){
+        super(props);
+        this.state ={ sources: this.getCitySource(props.initState)};      
+        this.handleChange = this.handleChange.bind(this); 
+    }
+    handleChange(level, newIndex){
+        console.log('start', level, newIndex);
+        let sources = this.state.sources.slice();
+        switch(level){
+            // 省级滑动，整个数据源就改变了
+            case 0:
+            sources = this.getCitySource({province:sources[0].data[newIndex]});
+            break;
+            // 市级滑动，区级数据源跟着改变
+            case 1:
+            sources[1].index = newIndex;
+            sources[2].data = city[sources[0].index].sub[sources[1].index].sub.map((t)=>{
+                return t.name ;
+            });
+            sources[2].index = 0;
+            break;
+            // 区级滑动，不需要联动，只改变自己
+            case 2:
+            sources[level].index = newIndex;
+            break;
+        }
+        this.setState({ sources });
     }
     getCitySource(params){
-        //索引省对应的索引
         let index = '';
-        const provinceItem = {index:'',data:[]},cityItem = {index:'',data:[]},areaItem = {index:'',data:[]};
+        const provinceItem = {index:'',data:[]},
+              cityItem = {index:'',data:[]},
+              areaItem = {index:'',data:[]};
+        //获取所有省份
         provinceItem.data = city.map((t)=>{
             return t.name ;
         });
-        //索引市对应的索引
+        //索引省对应的索引
         if(params.province && params.province !==''){
-            const index =  this.searchIndex('name',params.province,city);
-            if(index !==''){
+            const index =  this.searchIndex('name', params.province, city);
+            if(index !== ''){
                 provinceItem.index = index;
             }
         }
-
         //索引市对应的索引
         if(params.city && params.city !==''){
             const queryArr = provinceItem.index ==='' ? city : city[provinceItem.index].sub;
@@ -209,7 +284,6 @@ export default class Pickers extends React.Component {
                 cityItem.index = index;
             }
         }
-
         //索引区对应的索引
         if(params.area && params.area !==''){
             const queryArr = cityItem.index ==='' ? city : city[provinceItem.index].sub[cityItem.index].sub;
@@ -285,26 +359,107 @@ export default class Pickers extends React.Component {
             }
         }
         return index;
+    }    
+    render(){
+        const { selectHandle, closeHandle, title, isShow} = this.props;
+        const pikerProps ={
+            title,
+            isShow,
+            selectHandle,
+            closeHandle,
+            sources: this.state.sources,
+            handleChange: this.handleChange
+        }
+    return (<CommonPicker {...pikerProps} />);
+    }
+}
+/* 日期选择器*/
+export class DatePicker extends React.Component {
+    constructor(props){
+        super(props);
+        this.state ={ sources: this.initSource(props.initState)};      
+        this.handleChange = this.handleChange.bind(this); 
+    }
+    handleChange(level, newIndex){
+        let [years, months, dates] = this.state.sources;
+        switch(level){
+            // 年份滑动，日数据源需要改变
+            case 0:
+            years.index = newIndex;
+            dates = this.initDays(years.data[newIndex], months.data[months.index]);
+            break;
+            // 月份滑动，日数据源需要改变
+            case 1:
+            months.index = newIndex;
+            dates = this.initDays(years.data[years.index], months.data[newIndex]);
+            break;
+            // 日期滑动，不需要联动，只改变自己
+            case 2:
+            dates.index = newIndex;
+            break;
+        }
+        this.setState({ sources: [years, months, dates] });
+    }
+    getMaxDate(year, month){
+        var newYear = year;    //取当前的年份        
+        var newMonth = month++;//取下一个月的第一天，方便计算（最后一天不固定）        
+        if(month>12)            //如果当前大于12月，则年份转到下一年        
+        {        
+            newMonth -=12;        //月份减        
+            newYear++;            //年份增        
+        }        
+        var newDate = new Date(newYear,newMonth,1);                //取当年当月中的第一天        
+        return (new Date(newDate.getTime()-DaySeconds)).getDate();//获取当月最后一天日期    
+    }
+    initSource(params){
+        const currentDay = new Date();
+        const currentYear = currentDay.getFullYear();
+        const currentMonth = currentDay.getMonth();
+        const currentDate = currentDay.getDate();
+        const { beginYear= currentYear-20, endYear= currentYear + 20 } = params;
+        const years = { data:[], index:0 };
+        const months = { data:[], index:0 };
+        let dates = { data:[], index:0 };
+        for(let i=beginYear;i < endYear; i++){
+            years.data.push(i);
+            (currentYear === i) && (years.index = i-beginYear);
+        }
+        for(let i=0; i < 12; i++){
+            const str = i<9 ? `0${i+1}` : `${i+1}`
+            months.data.push(str);
+            (currentMonth === i) && (months.index = i);
+        }
+        dates = this.initDays(currentYear, currentMonth, currentDate);
+        return [years, months, dates];
+    }
+    initDays(year, month, currentDate){
+        let dates = (this.state && this.state.sources[2]) || { data:[], index: 0 };
+        const maxDate =  this.getMaxDate(year,month);
+        dates.data = [];
+        let index = dates.index || 0;
+        for(let i=1; i <= maxDate; i++){
+            const str = i<10 ? `0${i}` : `${i}`
+            dates.data.push(str);
+            currentDate && (currentDate === i) && (dates.index = i-1);
+        }
+        index = index > (maxDate-1) ? (maxDate-1) : index;
+        dates.index = index;
+        return dates;
     }
     render(){
-        const PickerList = this.state.sources.map((t,index)=>{
-            return (<Picker level={index} data={t.data} index={t.index} key={index} position = {this.state.position}  status = {this.state.status} event ={this.callBack}/>)
-        });
-        const isShowModule = this.props.isShow ? 'picker-module':'picker-module none'
-        return (
-            <div className={isShowModule}
-                 onMouseUp={(e)=>{this.eventListen(e)}}
-                 onTouchEnd={(e)=>{this.eventListen(e)}}
-            >
-                <div className="piker-shadow"></div>
-                <div className="button-bar">
-                    <span className="btn-cancel" onClick={this.cancelClick}>取消</span>
-                    <span className="select-name">{this.props.title || '选择'}</span>
-                    <span className="btn-sure" onClick={this.handleClick}>确定</span>
-                </div>
-                <div className="picker-contents">
-                    { PickerList }
-                </div>
-            </div>)
-    }
+        const { selectHandle, closeHandle, title, isShow} = this.props;
+        const pikerProps ={
+            title,
+            isShow,
+            selectHandle,
+            closeHandle,
+            sources: this.state.sources,
+            handleChange: this.handleChange
+        }
+    return (<CommonPicker {...pikerProps} />);
+    }    
+}
+/* 时间选择器*/
+export class TimePicker extends React.Component {
+
 }

@@ -1,9 +1,13 @@
 @import "theme";
-
+html{
+  height: 100%;
+  overflow: hidden;
+}
 body {
   font: normal 16px "Microsoft Yahei", Futura, sans-serif;
-  height: 100%;
-  background-color: $titleBgColor;
+  height: 80%;
+  overflow: hidden;
+  touch-action: none;
 }
 
 $bottonBg: $auxiliaryColor07;
@@ -53,7 +57,6 @@ ol, ul, li {
     li {
       font-weight: bold;
       margin: 20px auto 0;
-      width: 25rem;
       font-size: 1.5rem;
       text-align: left;
       padding-left:1rem;
@@ -76,9 +79,9 @@ ol, ul, li {
   position: relative;
   z-index: 8;
   line-height: 35px;
-  background-color: $sec-level;
+  background-color: $primaryFontColor ;
   font-size: 16px;
-  color: $primaryFontColor;
+  color: $sec-level;
   span {
     display: inline-block;
     box-sizing: border-box;
@@ -90,7 +93,7 @@ ol, ul, li {
   }
   .btn-cancel {
     text-align: left;
-    padding-left: 20px;
+    padding-left: 30px;
     &:hover {
       cursor: pointer;
       color: white;
@@ -98,13 +101,15 @@ ol, ul, li {
   }
   .btn-sure {
     text-align: right;
-    padding-right: 20px;
+    padding-right: 30px;
     &:hover {
       cursor: pointer;
       color: white;
     }
   }
 }
+
+
 
 .piker-shadow {
   position: fixed;
@@ -116,19 +121,12 @@ ol, ul, li {
   background-color: rgba(0, 0, 0, .68);//.68
 }
 
-.city-picker{
-
-}
-
 .picker-module {
   position: fixed;
   bottom: 0;
   left: 0;
   right: 0;
   z-index: 5;
-  &.none {
-    display: none;
-  }
   .picker-contents{
     position: relative;
     z-index: 7;
@@ -142,8 +140,8 @@ ol, ul, li {
     overflow: hidden;
   }
   li {
-    height: 35px;
-    line-height: 35px;
+    height: 40px;
+    line-height: 40px;
     text-align: center;
   }
   .opacity-layer {
@@ -165,7 +163,7 @@ ol, ul, li {
     top: 0;
     width: 100%;
     z-index: 6;
-    font-size: 1.2rem;
+    font-size: 1.1rem;
     transition: font 0.3s, transform 0.5s ease-out;
     color: $darkBluefontColor;
   }
