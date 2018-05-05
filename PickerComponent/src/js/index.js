@@ -49,14 +49,11 @@ class Treat extends React.Component{
             area:'青羊区'
         };
         return (
-            <div className="home-page" 
-            onTouchStart = { e => {console.log('move'),e.preventDefault();e.stopPropagation();}}
-            onTouchMove = { e => {console.log('move'),e.preventDefault();;e.stopPropagation();}}
-            >
+            <div className="home-page">
                 <span>{ this.state.val }</span>
                 <ul className="level-items">
                     <li onClick={()=>{this.showPicker(0)}}>
-                        <span>城市选择：</span>
+                        <span>省市区选择：</span>
                         <label>{this.state.res[0]}</label>
                     </li>
                     <li onClick={()=>{this.showPicker(2)}}>
@@ -64,7 +61,11 @@ class Treat extends React.Component{
                         <label>{this.state.res[2]}</label>
                     </li>
                     <li onClick={()=>{this.showPicker(3)}}>
-                        <span>三项选择：</span>
+                        <span>日期选择：</span>
+                        <label>{this.state.res[3]}</label>
+                    </li>
+                    <li onClick={()=>{this.showPicker(3)}}>
+                        <span>时间选择：</span>
                         <label>{this.state.res[3]}</label>
                     </li>
                 </ul>
@@ -73,12 +74,12 @@ class Treat extends React.Component{
                         <use xlinkHref="#aboutIcon"></use>
                     </svg>
                 </a>
-                 <CityPicker
+                <CityPicker
                     selectHandle={this.selectIndex}
                     isShow={this.state.showPicker[0]}
                     closeHandle={this.closePicker}
                     initState = {params}
-                /> 
+                />
                 <CommonPicker sources ={[{index:2,data:[1,2,3,4]},{index:2,data:wordData}]}
                 title = "通用选择器"
                          selectHandle={this.selectIndex}

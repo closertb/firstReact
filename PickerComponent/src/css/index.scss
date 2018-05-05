@@ -57,14 +57,14 @@ ol, ul, li {
     li {
       font-weight: bold;
       margin: 20px auto 0;
-      font-size: 1.5rem;
+      font-size: 1.2rem;
       text-align: left;
       padding-left:1rem;
       background-color: white;
       border-radius: 1.5rem;
       letter-spacing: 0.5rem;
       span{
-        font-size: 1.3rem;
+        font-size: 1.2rem;
       }
       label{
         font-size: 1rem;
@@ -140,9 +140,15 @@ ol, ul, li {
     overflow: hidden;
   }
   li {
+    box-sizing: border-box;
+    width:100%;
     height: 40px;
+    padding: 0 5px;
     line-height: 40px;
     text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
   }
   .opacity-layer {
     position: relative;

@@ -9,6 +9,7 @@ import React from 'react';
 import {city} from '../util/city';
 
 const LineHeight = 40;
+const InitMarginTop = 2*LineHeight;
 const RollingAngle = -30;
 const DaySeconds=1000*60*60*24;
 /**
@@ -28,6 +29,26 @@ Array.prototype.someIndex = function (callback) {
     }
     return res;
 };
+
+/**
+ * fun: 获取当前时刻的时间戳
+ */
+const getTimeStamp = () =>{
+    return (new Date()).getTime();
+}
+/**
+ * fun: 计算绝对值
+ * @param {number} data 要计算的值 
+ */
+const Abs = data => Math.abs(data);
+/**
+ * fun: 无状态组件，触摸列表最小单元
+ * @param {Object} props 元素的属性集
+ */
+const AddMarginTop = sources => sources.map( item => {
+    const marginTop = InitMarginTop-item.index * LineHeight;
+    return { ...item, marginTop };
+});
 function Item(props) {
     const { str, value } = props;
     return (
@@ -36,14 +57,18 @@ function Item(props) {
         </li>
     );
 }
+/**
+ * fun: 无状态组件，触摸列表元素
+ * @param {Object} props 元素的属性集
+ */
 function PickerItem(props){
-    const { data, onStartListen, selectIndex, level } = props;
+    const { data, onStartListen, selectIndex, level, marginTop } = props;
     if(data && data.length === 0){
         return null
     }
     const itemList = data.map((t,index)=>{
         let diff = selectIndex - index,styleStr={};
-        if(Math.abs(diff)<4){
+        if(Abs(diff)<4){
             styleStr = {
                 transform: 'rotateX('+diff*RollingAngle+'deg)'
             };
@@ -52,13 +77,13 @@ function PickerItem(props){
         return (<Item value={t}  key={t} str={styleStr}/>)
     })
     const styleStr = {
-        transform: 'translate(0,'+(2-selectIndex)*LineHeight+'px)'
+        transform: `translate(0,${marginTop}px)`
     };
 
     return (
         <div className="picker-content"
-             onMouseDown={(e)=>{e.preventDefault();onStartListen(e, level)}}
-             onTouchStart={(e)=>{e.preventDefault();onStartListen(e, level)}}
+             onMouseDown={(e)=>{onStartListen(e, level)}}
+             onTouchStart={(e)=>{onStartListen(e, level)}}
         >
             <ul className="opacity-layer">
                 <li></li>
@@ -77,12 +102,10 @@ class Picker extends React.Component {
         super(props);
         this.eve ={
             status:false,
-            type:'none',
+            isDraging: false,
             level:0,
-            pointer:{
-                start:0,
-                end:0
-            }
+            startTime: 0,
+            startPos: 0
         };
         this.state ={};
         this.handleClick = this.handleClick.bind(this);
@@ -95,32 +118,81 @@ class Picker extends React.Component {
         const target = document.querySelector('.js-picker-module');
         target.addEventListener('touchmove', (e) =>{
           e.preventDefault();
-          e.stopPropagation();
         }, false);
       }    
     onStartListen(e,level){
         const point = this.getPos(e).y;
-        const newEve = {
+        this.eve = {
             level,
             status: true,
-            pointer:{
-                start: point,
-                end: point
-            },
-            startTime: (new Date()).getTime()
-        }
-        this.eve = { ...this.eve, ...newEve };
+            startPos: point,
+            isDraging: false,
+            startTime: getTimeStamp()
+        };
     }
     onMoveListen(e){
-        this.eve.pointer.end =this.getPos(e).y;
-        this.moveDistance(this.eve.pointer);
-        this.eve.status = false;
+        const { startPos, startTime } = this.eve;
+        const nowTime = getTimeStamp();
+        const nowPoint = this.getPos(e).y;
+        const moveDis = nowPoint-startPos;
+        // 触摸滑动解除时间小于300ms或移动距离小于10Pixs,不做处理
+        if ((nowTime-startTime) < 300 || Abs(moveDis) <8) {
+            return ;
+        }
+        this.eve.isDraging = true;
+        this.moveDistance(moveDis);
+        this.eve.startPos = nowPoint;
+        this.eve.startTime = nowTime;
     }
     onEndListen(e){
-        this.eve.pointer.end =this.getPos(e).y;
-        this.moveDistance(this.eve.pointer);
+        const { startPos, isDraging } = this.eve;
+        const nowPoint = this.getPos(e).y;
+        const moveDis = nowPoint-startPos;
+        // 如果没有拖动，只是单纯的触摸移动，距离小于8Pixs,不做处理
+        if (!isDraging && Abs(moveDis) <8 ) {
+            return ;
+        }
+        this.eve.isDraging = false;  // 将拖动状态重置
+        this.moveDistance(moveDis);
         this.eve.status = false;
     }        
+    /**
+     * fun: 执行移动，但是要计算上限和下限
+     * @param {number} moveDis 
+     */
+    moveDistance(moveDis){
+        const { status, level, isDraging } = this.eve;
+        if(!status){
+            return ;
+        }
+        const { data, index, marginTop } = this.props.sources[level];
+        let _marginTop = marginTop + moveDis;
+        let newIndex = 0;
+        if(isDraging) {  // 处理拖拽时的情况
+            const maxMargin = (2.5-data.length) * LineHeight; //最大向上滑动距离，有半个行高少一点的多余量
+            // _marginTop 如果滑动大于其能滑动的行程，进行处理
+            _marginTop = _marginTop < maxMargin ? maxMargin : _marginTop;
+            _marginTop = _marginTop > LineHeight*2.5 ? LineHeight*2.5 : _marginTop;
+            // 新选中值的处理
+            newIndex = 2 - Math.round(_marginTop/LineHeight); 
+            newIndex = newIndex < 0 ? 0 : newIndex;    
+            console.log('end last', newIndex, _marginTop);
+        }else { // 处理滑动结束时的情况
+            let top=0;
+            top= top + moveDis;
+            newIndex = index - Math.round(top/LineHeight);
+            if(newIndex< 0){
+                newIndex =0;
+            }
+            if(newIndex>(data.length-1)){
+                newIndex = data.length-1;
+            }
+            _marginTop = (2-newIndex) * LineHeight;
+            console.log('end last', newIndex, _marginTop);
+        }
+
+        this.props.handleChange(level, newIndex, _marginTop );
+    }
     handleClick(){
         const { selectHandle, closeHandle, sources } = this.props;
         const res = sources.map((t,index)=>{
@@ -137,35 +209,14 @@ class Picker extends React.Component {
             x:e.screenX || e.changedTouches[0].pageX,
             y:e.screenY || e.changedTouches[0].pageY,
         }
-    };
-    moveDistance(pointer){
-        const { status, level } = this.eve;
-        if(!status){
-            return ;
-        }
-        const target = this.props.sources[level];
-
-        let md =pointer.start - pointer.end,top=0;
-        if( Math.abs(md)<5){
-            return ;
-        }
-        top= top - md;
-        let newIndex = target.index - Math.round(top/LineHeight);
-        if(newIndex< 0){
-            newIndex =0;
-        }
-        if(newIndex>(target.data.length-1)){
-            newIndex = target.data.length-1;
-        }
-        // 设定下一个节拍，数据集的样子
-        this.props.handleChange(level,newIndex);
-    }
+    };   
     render(){
         const { sources, title } = this.props;
-        const PickerLists = sources.map(({data, index},level)=>{
+        const PickerLists = sources.map(({data, marginTop, index},level)=>{
             const pickerProps = {
                 key:level,
                 data,
+                marginTop,
                 selectIndex: index,
                 level,
                 onStartListen: this.onStartListen
@@ -176,7 +227,6 @@ class Picker extends React.Component {
             <div className="picker-module js-picker-module"
                  onMouseUp={ e=>{ this.onEndListen(e)}}
                  onTouchEnd={ e=>{this.onEndListen(e)}}
-                 onTouchMove={ e=>{this.onMoveListen(e)}}
             >
                 <div className="piker-shadow"></div>
                 <div className="button-bar">
@@ -184,7 +234,9 @@ class Picker extends React.Component {
                     <span className="select-name">{title || '选择'}</span>
                     <span className="btn-sure" onClick={this.handleClick}>确定</span>
                 </div>
-                <div className="picker-contents">
+                <div className="picker-contents"
+                    onTouchMove={ e=>{this.onMoveListen(e)}}
+                >
                     { PickerLists }
                 </div>
             </div>)
@@ -193,18 +245,25 @@ class Picker extends React.Component {
 export default class CommonPicker extends React.Component {
     constructor(props){
         super(props);
-        this.state ={ sources: props.sources};      
+        let tempSource = Array.isArray(props.sources) ?  props.sources.slice() : [ props.sources];
+        tempSource = AddMarginTop(tempSource);
+        this.state ={ sources: tempSource };
         this.handleChange = this.handleChange.bind(this); 
         this.colseHandle = this.colseHandle.bind(this);
         this.selectHandle = this.selectHandle.bind(this);
     }
     componentWillReceiveProps(nextProps){
         if(nextProps !== this.props) {
+            let tempSource = nextProps.sources.map( item =>{
+                !item.hasOwnProperty('marginTop') && (item.marginTop = InitMarginTop-item.index*LineHeight);
+                return item;
+            });
             this.setState({ sources: nextProps.sources})
         }
-    }
-    handleChange(level, newIndex){
+    }    
+    handleChange(level, newIndex, marginTop){
         const sources = this.state.sources.slice();
+        sources[level].marginTop = marginTop;
         sources[level].index = newIndex;
         this.setState({ sources });
     }
@@ -234,25 +293,29 @@ export class CityPicker extends React.Component {
         this.state ={ sources: this.getCitySource(props.initState)};      
         this.handleChange = this.handleChange.bind(this); 
     }
-    handleChange(level, newIndex){
-        console.log('start', level, newIndex);
+    handleChange(level, newIndex, marginTop){
         let sources = this.state.sources.slice();
         switch(level){
             // 省级滑动，整个数据源就改变了
             case 0:
             sources = this.getCitySource({province:sources[0].data[newIndex]});
+            sources[0].index = newIndex;
+            sources[0].marginTop = marginTop;
             break;
             // 市级滑动，区级数据源跟着改变
             case 1:
             sources[1].index = newIndex;
+            sources[1].marginTop = marginTop;
             sources[2].data = city[sources[0].index].sub[sources[1].index].sub.map((t)=>{
                 return t.name ;
             });
             sources[2].index = 0;
+            sources[2].marginTop = InitMarginTop;
             break;
             // 区级滑动，不需要联动，只改变自己
             case 2:
-            sources[level].index = newIndex;
+            sources[2].index = newIndex;
+            sources[2].marginTop = marginTop;
             break;
         }
         this.setState({ sources });
@@ -312,7 +375,7 @@ export class CityPicker extends React.Component {
         areaItem.data = city[provinceItem.index].sub[cityItem.index].sub.map((t)=>{
             return t.name ;
         });
-        return [provinceItem,cityItem,areaItem];
+        return AddMarginTop([provinceItem,cityItem,areaItem]);
     }
     /**
      * 作用：根据查询的名字，取出对应的索引值
@@ -380,22 +443,25 @@ export class DatePicker extends React.Component {
         this.state ={ sources: this.initSource(props.initState)};      
         this.handleChange = this.handleChange.bind(this); 
     }
-    handleChange(level, newIndex){
+    handleChange(level, newIndex, marginTop){
         let [years, months, dates] = this.state.sources;
         switch(level){
             // 年份滑动，日数据源需要改变
             case 0:
             years.index = newIndex;
+            years.marginTop = marginTop;
             dates = this.initDays(years.data[newIndex], months.data[months.index]);
             break;
             // 月份滑动，日数据源需要改变
             case 1:
             months.index = newIndex;
+            months.marginTop = marginTop;
             dates = this.initDays(years.data[years.index], months.data[newIndex]);
             break;
             // 日期滑动，不需要联动，只改变自己
             case 2:
             dates.index = newIndex;
+            dates.marginTop = marginTop;
             break;
         }
         this.setState({ sources: [years, months, dates] });
@@ -417,7 +483,7 @@ export class DatePicker extends React.Component {
         const currentMonth = currentDay.getMonth();
         const currentDate = currentDay.getDate();
         const { beginYear= currentYear-20, endYear= currentYear + 20 } = params;
-        const years = { data:[], index:0 };
+        const years = { data:[], index:0};
         const months = { data:[], index:0 };
         let dates = { data:[], index:0 };
         for(let i=beginYear;i < endYear; i++){
@@ -444,6 +510,7 @@ export class DatePicker extends React.Component {
         }
         index = index > (maxDate-1) ? (maxDate-1) : index;
         dates.index = index;
+        dates.marginTop = (2-index)*LineHeight;
         return dates;
     }
     render(){
