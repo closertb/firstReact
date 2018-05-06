@@ -12,6 +12,12 @@ const LineHeight = 40;
 const InitMarginTop = 2*LineHeight;
 const RollingAngle = -30;
 const DaySeconds=1000*60*60*24;
+const TimeScale = (new Array(60)).fill(1).map((item,index) =>{
+    return index<10 ? `0${index}` : `${index}`;
+});
+const HourScale = is24Hour => (new Array(12+ 12*is24Hour)).fill(1).map((item,index) =>{
+    return index<10 ? `0${index}` : `${index}`;
+});
 /**
  * 作用：改写ES5 ARRAY的some方法
  * 区别：当这个值存在数组中时，返回的数值不是true，而是其所在的索引值
@@ -176,7 +182,7 @@ class Picker extends React.Component {
             // 新选中值的处理
             newIndex = 2 - Math.round(_marginTop/LineHeight); 
             newIndex = newIndex < 0 ? 0 : newIndex;    
-            console.log('end last', newIndex, _marginTop);
+            //console.log('end last', newIndex, _marginTop);
         }else { // 处理滑动结束时的情况
             let top=0;
             top= top + moveDis;
@@ -188,7 +194,7 @@ class Picker extends React.Component {
                 newIndex = data.length-1;
             }
             _marginTop = (2-newIndex) * LineHeight;
-            console.log('end last', newIndex, _marginTop);
+            //console.log('end last', newIndex, _marginTop);
         }
 
         this.props.handleChange(level, newIndex, _marginTop );
@@ -528,5 +534,36 @@ export class DatePicker extends React.Component {
 }
 /* 时间选择器*/
 export class TimePicker extends React.Component {
-
+    constructor(props){
+        super(props);
+        const { is24Hour=true }= props; 
+        this.state ={ sources: this.initSource(is24Hour)};      
+    }
+    initSource(is24Hour){
+        const curTime = new Date();
+        let hour = curTime.getHours();
+        let min = curTime.getMinutes();
+        if(is24Hour) {
+            const hours = { index: hour, data: HourScale(true) };
+            const minutes = { index: min, data: TimeScale };
+            return [hours, minutes];           
+        }
+        let isHalfDay = Math.floor(hour/12);
+        hour %= 12;
+        const halfDay ={ index: isHalfDay, data: ['上午','下午']};
+        const hours = { index: hour, data: HourScale(false) };
+        const minutes = { index: min, data: TimeScale };
+        return [halfDay, hours, minutes];
+    }
+    render(){
+        const { selectHandle, closeHandle, title, isShow} = this.props;
+        const pickerProps ={
+            title,
+            isShow,
+            selectHandle,
+            closeHandle,
+            sources: this.state.sources
+        }
+    return (<CommonPicker {...pickerProps} />);
+    } 
 }

@@ -7,7 +7,7 @@
  */
 import React from 'react';
 import {render} from 'react-dom';
-import CommonPicker,{ CityPicker, DatePicker } from './lib/pickers';
+import CommonPicker,{ CityPicker, DatePicker, TimePicker } from './lib/pickers';
 import '../css/index.scss';
 
 /**
@@ -64,9 +64,9 @@ class Treat extends React.Component{
                         <span>日期选择：</span>
                         <label>{this.state.res[3]}</label>
                     </li>
-                    <li onClick={()=>{this.showPicker(3)}}>
+                    <li onClick={()=>{this.showPicker(1)}}>
                         <span>时间选择：</span>
-                        <label>{this.state.res[3]}</label>
+                        <label>{this.state.res[1]}</label>
                     </li>
                 </ul>
                 <a href="http://closertb.site/" className="about">
@@ -93,6 +93,13 @@ class Treat extends React.Component{
                     isShow={this.state.showPicker[3]}
                     closeHandle={this.closePicker}
                 />
+                <TimePicker 
+                    title="时间选择器"
+                    initState = {params}
+                    selectHandle={this.selectIndex}
+                    isShow={this.state.showPicker[1]}
+                    closeHandle={this.closePicker}
+                />                
             </div>
         )
     }
