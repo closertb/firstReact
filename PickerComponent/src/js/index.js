@@ -5,105 +5,68 @@
  * @version 1.0
  * Description:
  */
-import React from 'react';
-import {render} from 'react-dom';
-import CommonPicker,{ CityPicker, DatePicker, TimePicker } from './lib/pickers';
-import '../css/index.scss';
+function channel() {
+  let taker;
 
-/**
-* picker组件测试程序
-* */
-class Treat extends React.Component{
-    constructor(){
-        super();
-        this.state ={
-            showPicker:[false,false,false,false],
-            res:['','','',''],
-            workId:'',
-        };
-        this.selectIndex = this.selectIndex.bind(this);
-        this.showPicker = this.showPicker.bind(this);
-        this.closePicker = this.closePicker.bind(this);
-        //this.showLog = this.showLog.bind(this);
+  function take(cb) {
+    taker = cb;
+  }
+
+  function put(input) {
+    if (taker) {
+      const tempTaker = taker;
+      taker = null;
+      tempTaker(input);
     }
-    closePicker() {
-        this.setState({showPicker:[false,false,false,false]})
-    }
-    showPicker(id) {
-        const choice = [false,false,false,false];
-        choice[id] = true;
-        this.setState({showPicker: choice,workId:id}); 
-    }
-    selectIndex(e) {
-        const id = this.state.workId;
-        const res = this.state.res;
-        res[id] = e.join('-');
-        this.setState({showPicker:[false,false,false,false],res:res});
-    }
-    componentDidMount(){
-        
-    }
-    render(){
-        const wordData = ['sb','fu','ck','nb'];
-        const params = {
-            area:'青羊区'
-        };
-        return (
-            <div className="home-page">
-                <span>{ this.state.val }</span>
-                <ul className="level-items">
-                    <li onClick={()=>{this.showPicker(0)}}>
-                        <span>省市区选择：</span>
-                        <label>{this.state.res[0]}</label>
-                    </li>
-                    <li onClick={()=>{this.showPicker(2)}}>
-                        <span>两项选择：</span>
-                        <label>{this.state.res[2]}</label>
-                    </li>
-                    <li onClick={()=>{this.showPicker(3)}}>
-                        <span>日期选择：</span>
-                        <label>{this.state.res[3]}</label>
-                    </li>
-                    <li onClick={()=>{this.showPicker(1)}}>
-                        <span>时间选择：</span>
-                        <label>{this.state.res[1]}</label>
-                    </li>
-                </ul>
-                <a href="http://closertb.site/" className="about">
-                    <svg>
-                        <use xlinkHref="#aboutIcon"></use>
-                    </svg>
-                </a>
-                <CityPicker
-                    selectHandle={this.selectIndex}
-                    isShow={this.state.showPicker[0]}
-                    closeHandle={this.closePicker}
-                    initState = {params}
-                />
-                <CommonPicker sources ={[{index:2,data:[1,2,3,4]},{index:2,data:wordData}]}
-                title = "通用选择器"
-                         selectHandle={this.selectIndex}
-                         isShow={this.state.showPicker[2]}
-                         closeHandle={this.closePicker}
-                />
-                <DatePicker 
-                    title="日期选择器"
-                    initState = {params}
-                    selectHandle={this.selectIndex}
-                    isShow={this.state.showPicker[3]}
-                    closeHandle={this.closePicker}
-                />
-                <TimePicker 
-                    title="时间选择器"
-                    initState = {params}
-                    selectHandle={this.selectIndex}
-                    isShow={this.state.showPicker[1]}
-                    closeHandle={this.closePicker}
-                />                
-            </div>
-        )
-    }
+  }
+
+  return {
+    put,
+    take,
+  };
 }
-render((
+
+const chan = channel();
+
+let i = 0;
+const $btn = document.querySelector('.btn');
+$btn.addEventListener('click', () => {
+  console.log('dfg');
+  const action = `action data${i++}`;
+  chan.put(action);
+}, false);
+function runTakeEffect(effect, cb) {
+  chan.take((input) => {
+    cb(input);
+  });
+}
+
+function take() {
+  return {
+    type: 'take'
+  };
+}
+
+function task(iterator) {
+  const iter = iterator();
+  console.log(iter);
+  function next(args) {
+    const result = iter.next(args);
+    if (!result.done) {
+      const effect = result.value;
+      if (effect.type === 'take') {
+        console.log('go on');
+        runTakeEffect(result.value, next);
+      }
+    }
+  }
+  next();
+}
+function* mainSaga() {
+  const action = yield take();
+  console.log(action);
+}
+task(mainSaga);
+/* render((
     <Treat />
-), document.getElementById('app'));
+), document.getElementById('app')); */

@@ -1,3 +1,4 @@
+/* eslint-disable */
 export const city = [{
   "region": "110000",
   "name": "北京市",
