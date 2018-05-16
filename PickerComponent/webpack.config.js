@@ -10,6 +10,10 @@ module.exports = {
         filename: 'bundle.js',
         path: path.resolve(__dirname, 'dist')
     },
+    build: {
+      assetsPublicPath: '/',
+      assetsSubDirectory: 'static'   
+    },
     devServer: {
         host: '0.0.0.0',
         hot:true,
