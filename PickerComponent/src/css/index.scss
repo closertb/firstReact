@@ -1,186 +1,193 @@
 @import "theme";
-html{
-  height: 100%;
-  overflow: hidden;
+html {
+    height: 100%;
+    overflow: hidden;
 }
+
 body {
-  font: normal 16px "Microsoft Yahei", Futura, sans-serif;
-  height: 80%;
-  overflow: hidden;
-  touch-action: none;
+    font: normal 16px "Microsoft Yahei", Futura, sans-serif;
+    height: 80%;
+    overflow: hidden;
+    touch-action: none;
 }
 
 $bottonBg: $auxiliaryColor07;
-div, p, ul, li, h2, h3, h4 {
-  margin: 0;
-  padding: 0;
+div,
+p,
+ul,
+li,
+h2,
+h3,
+h4 {
+    margin: 0;
+    padding: 0;
 }
 
-ol, ul, li {
-  list-style: none;
+ol,
+ul,
+li {
+    list-style: none;
 }
-
-
 
 .home-page {
-  margin-top: 80px;
-  text-align: center;
-  color: $primaryFontColor;
-  h2 {
-    line-height: 1.5em;
-  }
-  h3 {
-    line-height: 2em;
-  }
-  a.about {
-    position: fixed;
-    right: 15px;
-    top: 15px;
-    text-decoration: none;
-    svg {
-      height: 35px;
-      width: 35px;
-      fill: $wirtefontColor;
+    margin-top: 80px;
+    text-align: center;
+    color: $primaryFontColor;
+    h2 {
+        line-height: 1.5em;
     }
-    &:hover {
-      color: $darkBluefontColor;
-      transition: all 0.3s;
-      svg {
-        fill: $defautFontColor;
-      }
+    h3 {
+        line-height: 2em;
     }
-  }
-  .level-items {
-    margin-top: 50px;
-    line-height: 3rem;
-    color: $e05;
-    li {
-      font-weight: bold;
-      margin: 20px auto 0;
-      font-size: 1.2rem;
-      text-align: left;
-      padding-left:1rem;
-      background-color: white;
-      border-radius: 1.5rem;
-      letter-spacing: 0.5rem;
-      span{
-        font-size: 1.2rem;
-      }
-      label{
-        font-size: 1rem;
-      }
+    a.about {
+        position: fixed;
+        right: 15px;
+        top: 15px;
+        text-decoration: none;
+        svg {
+            height: 35px;
+            width: 35px;
+            fill: $wirtefontColor;
+        }
+        &:hover {
+            color: $darkBluefontColor;
+            transition: all 0.3s;
+            svg {
+                fill: $defautFontColor;
+            }
+        }
     }
-  }
+    .level-items {
+        margin-top: 50px;
+        line-height: 3rem;
+        color: $e05;
+        li {
+            font-weight: bold;
+            margin: 20px auto 0;
+            font-size: 1.2rem;
+            text-align: left;
+            padding-left: 1rem;
+            background-color: white;
+            border-radius: 1.5rem;
+            letter-spacing: 0.5rem;
+            span {
+                font-size: 1.2rem;
+            }
+            label {
+                font-size: 1rem;
+            }
+        }
+    }
 }
-
-
 
 .button-bar {
-  position: relative;
-  z-index: 8;
-  line-height: 35px;
-  background-color: $primaryFontColor ;
-  font-size: 16px;
-  color: $sec-level;
-  span {
-    display: inline-block;
-    box-sizing: border-box;
-    text-align: center;
-    width: 33.3%;
-  }
-  .select-name {
-    font-size: 18px;
-  }
-  .btn-cancel {
-    text-align: left;
-    padding-left: 30px;
-    &:hover {
-      cursor: pointer;
-      color: white;
+    position: relative;
+    z-index: 8;
+    line-height: 35px;
+    background-color: $primaryFontColor;
+    font-size: 16px;
+    color: $sec-level;
+    span {
+        display: inline-block;
+        box-sizing: border-box;
+        text-align: center;
+        width: 33.3%;
     }
-  }
-  .btn-sure {
-    text-align: right;
-    padding-right: 30px;
-    &:hover {
-      cursor: pointer;
-      color: white;
+    .select-name {
+        font-size: 18px;
     }
-  }
+    .btn-cancel {
+        text-align: left;
+        padding-left: 30px;
+        &:hover {
+            cursor: pointer;
+            color: white;
+        }
+    }
+    .btn-sure {
+        text-align: right;
+        padding-right: 30px;
+        &:hover {
+            cursor: pointer;
+            color: white;
+        }
+    }
 }
 
-
-
 .piker-shadow {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  top: 0;
-  z-index: 4;
-  background-color: rgba(0, 0, 0, .68);//.68
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    top: 0;
+    z-index: 4;
+    background-color: rgba(0, 0, 0, .68); //.68
 }
 
 .picker-module {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  z-index: 5;
-  .picker-contents{
-    position: relative;
-    z-index: 7;
-    display: flex;
-    justify-content: flex-start;
-    background-color: white;
-  }
-  .picker-content {
-    position: relative;
-    width: 100%;
-    overflow: hidden;
-  }
-  li {
-    box-sizing: border-box;
-    width:100%;
-    height: 40px;
-    padding: 0 5px;
-    line-height: 40px;
-    text-align: center;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-  }
-  .opacity-layer {
-    position: relative;
-    z-index: 8;
-    li {
-      background-color: rgba(225, 225, 225, 0.6);
-      &.curry {
-        border: 1px solid rgba(225, 225, 225, 0.7);
-        border-left:none ;
-        border-right:none ;
-        background-color: rgba(225, 225, 225, 0.2);
-      }
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 5;
+    .picker-contents {
+        position: relative;
+        z-index: 7;
+        display: flex;
+        justify-content: flex-start;
+        background-color: white;
     }
-
-  }
-  .select-list {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    z-index: 6;
-    font-size: 1.1rem;
-    transition: font 0.3s, transform 0.5s ease-out;
-    color: $darkBluefontColor;
-  }
+    .picker-content {
+        position: relative;
+        width: 100%;
+        overflow: hidden;
+    }
+    li {
+        box-sizing: border-box;
+        width: 100%;
+        height: 40px;
+        padding: 0 5px;
+        line-height: 40px;
+        text-align: center;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+    }
+    .opacity-layer {
+        position: relative;
+        z-index: 8;
+        li {
+            background-color: rgba(225, 225, 225, 0.6);
+            &.curry {
+                border: 1px solid rgba(225, 225, 225, 0.7);
+                border-left: none;
+                border-right: none;
+                background-color: rgba(225, 225, 225, 0.2);
+            }
+        }
+    }
+    .select-list {
+        position: absolute;
+        top: 0;
+        width: 100%;
+        z-index: 6;
+        font-size: 1.1rem;
+        transition: font 0.3s, transform 0.5s ease-out;
+        color: $darkBluefontColor;
+    }
 }
 
-.counter{
-  button{
-    display: inline-block;
-    width:42px;
-    height:42px;
-    margin: 10px;
-    font:bold 35px/42px 'Microsoft Himalaya';
-  }
+.counter {
+    button {
+        display: inline-block;
+        width: 42px;
+        height: 42px;
+        margin: 10px;
+        font: bold 35px/42px 'Microsoft Himalaya';
+    }
+}
+
+.avatar-uploader > .ant-upload {
+    width: 128px;
+    height: 128px;
 }

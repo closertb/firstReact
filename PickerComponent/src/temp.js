@@ -112,4 +112,6 @@ class Treat extends React.Component {
     );
   }
 }
-
+render((
+    <Treat />
+), document.getElementById('app'));
