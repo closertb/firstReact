@@ -13,7 +13,7 @@ export default class Block extends React.Component{
     constructor(props){
         super(props);
         this.size = this.props.size / this.props.level ;
-        this.boxSize = this.props.size + this.props.level+1;
+        this.boxSize = this.props.size + Number(this.props.level) + 1;
         this.handleEvent = this.handleEvent.bind(this);
     }
     handleEvent(dir,index){

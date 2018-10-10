@@ -54,6 +54,7 @@ export default class Game extends React.Component {
         this.resetClick = this.resetClick.bind(this);
         let size = Math.min(window.innerWidth-20,window.innerHeight);
         this.blockSize = Math.floor(size/60)*60;
+        console.log(size, this.blockSize);
     }
     componentDidMount() {
         this.timer(0);
