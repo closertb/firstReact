@@ -14,7 +14,6 @@ import Game from './page/game';
 import Simple from "./page/simple";
 import Home from "./page/home";
 import {Icons} from './component/icon';
-import CityPicker from './page/cityPicker';
 
 
 
@@ -37,15 +36,7 @@ class Root  extends React.Component {
         </Router>)
     }
 }
-/**
-* picker组件测试程序
-* */
-class Treat extends React.Component{
-    render(){
-        return (<CityPicker>
-        </CityPicker>)
-    }
-}
+
 render((
     <Root />
 ), document.getElementById('app'));

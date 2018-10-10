@@ -31,7 +31,7 @@ function Status(props) {
 export default class Game extends React.Component {
     constructor(props) {
         super(props);
-        this.level = this.props.location.query.level;
+        this.level = this.props.location.search.split('=')[1];
         this.length = this.level * this.level;
         const squares =evenInverseNumber(this.level);
         this.state = {
@@ -111,7 +111,6 @@ export default class Game extends React.Component {
                 step:this.state.step+1
             });
         }
-        console.log('sta',this.state.squares);
     };
     pauseClick(){
         clearInterval(this.interId);

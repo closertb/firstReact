@@ -45,12 +45,7 @@ export default class Simple extends React.Component {
     handleClick(dir, index) {
     };
     render() {
-        const link = {
-            pathname: '/game',
-            query: {
-                level: this.level
-            }
-        };
+        const link = `/game?level=${this.level}`;
         return (
             <div className="game-box">
                 <Status value={this.state.level}/>
