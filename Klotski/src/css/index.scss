@@ -179,7 +179,7 @@ ol, ul, li {
     background-color: $auxiliaryColor07;
     margin: 0 2px 2px 0;
     font: bold 1.5rem "Microsoft Yahei";
-    transition: transform 1s ease-out;
+    transition: transform .2s ease-in-out;
     touch-action: none;
     &:before {
       content: '';

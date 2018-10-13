@@ -8,7 +8,7 @@
 import React from 'react';
 import Block from '../component/block';
 import ShadowBox from '../component/shadow';
-import {randomArr, getTargetState,evenInverseNumber} from '../util/util';
+import {randomArr, getTargetState, evenInverseNumber} from '../util/util';
 import {Link} from 'react-router-dom';
 
 function Status(props) {
@@ -40,21 +40,17 @@ export default class Game extends React.Component {
             time:'00:00:00',
             timePass:0,
             step:0,
+            update: false,
             //will change
-            squares: squares.map((t)=>{
-                return {
-                    value:t
-                };  //存储成索引和值的形式，属性名保持和数组索引一致
-            }),
+            squares,
             showShadow:false
         };
-        this.handleClick = this.handleClick.bind(this);
         this.pauseClick = this.pauseClick.bind(this);
         this.startClick = this.startClick.bind(this);
         this.resetClick = this.resetClick.bind(this);
+        this.handleSuccess = this.handleSuccess.bind(this);
         let size = Math.min(window.innerWidth-20,window.innerHeight);
         this.blockSize = Math.floor(size/60)*60;
-        console.log(size, this.blockSize);
     }
     componentDidMount() {
         this.timer(0);
@@ -81,38 +77,23 @@ export default class Game extends React.Component {
     tick(timeStr,tPass){
         this.setState({
             timePass:tPass,
-            time:timeStr
+            time:timeStr,
+            update: false,
         })
     }
-    handleClick(dir, index) {
-        const squares = this.state.squares.slice();
-        const newIndex = getTargetState(this.level, index, dir);
-        //will change
-        if (newIndex === index || squares[newIndex].value !== 0) {
-            return;
-        }
-        let temp = squares[index].value;
-        squares[index].value = squares[newIndex].value;
-        squares[newIndex].value = temp;
-        var isSuccess = squares.every((t,index) => {
-            return t.value === (index + 1)%this.length;
+    handleSuccess(nextSquares) {
+      const isSuccess = nextSquares.every((t => t.value === (t.index + 1)%this.length));
+      const step = this.state.step + 1;
+      if (isSuccess) {
+        clearInterval(this.interId);
+        this.setState({
+          success: true,
+          step,
         });
-
-
-        if (isSuccess) {
-            clearInterval(this.interId);
-            this.setState({
-                squares: squares,
-                success: true,
-                step:this.state.step+1
-            });
-        } else {
-            this.setState({
-                squares: squares,
-                step:this.state.step+1
-            });
-        }
-    };
+      } else {
+        this.setState({ step });
+      }  
+    }
     pauseClick(){
         clearInterval(this.interId);
         this.setState({
@@ -132,7 +113,8 @@ export default class Game extends React.Component {
             timePass:0,
             step:0,
             level:this.level,
-            squares:evenInverseNumber(this.level)
+            update: true,
+            squares: evenInverseNumber(this.level),
         });
         this.timer(0);
     }
@@ -144,11 +126,12 @@ export default class Game extends React.Component {
                         step ={ this.state.step}
                 />
                 <Block
-                    handle={this.handleClick}
+                    handle={this.handleSuccess}
                     level={this.state.level}
                     squares={this.state.squares}
                     size = {this.blockSize}
                     simple ={false}
+                    update ={this.state.update}
                 />
                 <ShadowBox
                     isShow ={ this.state.showShadow }

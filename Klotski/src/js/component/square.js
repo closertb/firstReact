@@ -9,26 +9,33 @@
 import React from 'react';
 import {pointer} from '../util/util';
 
-export default function Square(props) {
-    const value =props.sequence,
-        level=props.level,
-        size= props.size,
-        offsetSize = props.size+2;
-    let classStr ="square";
-    const styleStr ={
-        width:size,
-        height:size,
-        transform:'translate('+offsetSize*(value%level)+'px,'+offsetSize*Math.floor(value/level)+'px)'
+export default class Square extends React.Component {
+    shouldComponentUpdate(nextProps) {
+      if(nextProps.update) {
+        return true;
+      }
+      return false;
     }
-    return (
+    render() {
+      const props = this.props;
+      const { prop, level, size } = this.props;
+      const { value, index } = prop;
+      const  offsetSize = size + 2;
+      const styleStr = value === 0 ? { display: 'none' } : {
+        width: size,
+        height: size,
+        transform: 'translate(' + offsetSize * (index % level) + 'px,' + offsetSize * Math.floor(index / level) + 'px)'
+      }
+      return (
         <li
-            className={classStr}
-            style ={styleStr}
-            onSelect = {(e)=>{e.preventDefault();}}
-            onMouseDown={(e)=>{e.preventDefault(); pointer.listen(e,null,value)}}
-            onTouchStart={(e)=>{ e.preventDefault();pointer.listen(e,null,value)}}
+          className="square"
+          style={styleStr}
+          onSelect={(e) => { e.preventDefault(); }}
+          onMouseDown={(e) => { e.preventDefault(); pointer.listen(e, null, prop) }}
+          onTouchStart={(e) => { e.preventDefault(); pointer.listen(e, null, prop) }}
         >
-            <span>{props.value}</span>
+          <span>{value}</span>
         </li>
-    );
+      ); 
+    }
 }

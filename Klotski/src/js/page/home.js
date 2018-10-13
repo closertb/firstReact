@@ -22,7 +22,6 @@ export default class Home extends React.Component {
     }
 
     selectIndex(e) {
-        console.log(e)
         const path = '/simple?level=' + e[0];
         this.props.history.push(path);
     }

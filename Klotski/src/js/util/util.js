@@ -149,7 +149,7 @@ export const getTargetState = (level, index, dir) => {
 }
 export const pointer = {
     status: false,
-    index:0,
+    prop: {},
     position: {
         startX: 0,
         startY: 0,
@@ -162,11 +162,11 @@ export const pointer = {
             y: e.screenY || e.changedTouches[0].pageY,
         }
     },
-    listen: function (e,callback,index) {
+    listen: function (e,callback,prop) {
         var type = e.type;
         if (type === 'mousedown' || type === 'touchstart') {
             var pos = this.getPos(e);
-            this.index = index;
+            this.prop = prop;
             this.status = true;
             this.position.startX = this.position.endX = pos.x;
             this.position.startY = this.position.endY = pos.y;
@@ -175,7 +175,7 @@ export const pointer = {
             const pos =  this.getPos(e);
             this.position.endX = pos.x;
             this.position.endY = pos.y;
-            callback(this.getDirection(),this.index);
+            callback && callback(this.getDirection(),this.prop);
             this.status = false;
         }
     },
@@ -231,8 +231,8 @@ export const timer ={
 export const arrayGenerate =(length)=>{
     const items =[];
     for(let i=1;i<length;i++){
-        items.push({value:i});
+        items.push(i);
     }
-    items.push({value:0});
+    items.push(0);
     return items ;
 }

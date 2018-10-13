@@ -71,7 +71,6 @@ export default class Pickers extends React.Component {
         const res = this.state.sources.map((t,index)=>{
             return t.data[t.index];
         });
-        console.log(res);
         this.props.selectHandle(res);
         this.props.closeHandle();
     }
